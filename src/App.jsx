@@ -1,10 +1,10 @@
-import BiodataDiri from './BiodataDiri';
+import FormPendaftaran from './pertemuan3/FormPendaftaran';
 
 function App() {
   return (
     <div>
-      {/* Memanggil Component Induk */}
-      <BiodataDiri />
+      {/* <BiodataDiri /> */}
+      <FormPendaftaran />
     </div>
   );
 }
