@@ -1,7 +1,6 @@
 export default function CardGuest({ dataWisata }) {
   return (
     <div className="bg-white p-4 shadow rounded-lg border border-gray-200 flex flex-col h-full hover:shadow-xl transition-shadow duration-300">
-      {/* Menampilkan Gambar Asli */}
       <img src={dataWisata.gambar} alt="wisata" className="w-full h-40 object-cover rounded" />
       
       {/* Konten Teks */}

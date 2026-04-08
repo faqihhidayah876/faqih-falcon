@@ -4,27 +4,39 @@ import CardGuest from './components/CardGuest';
 import TabelAdmin from './components/TabelAdmin';
 
 export default function DashboardWisata() {
-  // State sangat dasar seperti yang dipelajari di pertemuan 3
-  const [tampilan, setTampilan] = useState("guest");
-  const [pencarian, setPencarian] = useState("");
-  const [filterKategori, setFilterKategori] = useState("");
-  const [filterProvinsi, setFilterProvinsi] = useState("");
+  // 1. INISIALISASI DATA FORM (Menggabungkan semua state input)
+  const [dataForm, setDataForm] = useState({
+    pencarian: "",
+    filterKategori: "",
+    filterProvinsi: ""
+  });
 
-  // Proses Filter Data (Simpel)
+  // State tampilan biarkan terpisah karena bukan bagian dari input filter
+  const [tampilan, setTampilan] = useState("guest");
+
+  // 2. INISIALISASI HANDLE PERUBAHAN NILAI (Satu fungsi untuk semua input)
+  const handleChange = (evt) => {
+    const { name, value } = evt.target;
+    setDataForm({
+      ...dataForm,
+      [name]: value,
+    });
+  };
+
+  // 3. PROSES FILTER MENGGUNAKAN dataForm
   const hasilFilter = dataJson.filter((item) => {
-    const cekNama = item.nama.toLowerCase().includes(pencarian.toLowerCase());
-    const cekKategori = filterKategori === "" ? true : item.kategori === filterKategori;
-    const cekProvinsi = filterProvinsi === "" ? true : item.provinsi === filterProvinsi;
+    // Memanggil state dengan dataForm.pencarian, dataForm.filterKategori, dst
+    const matchPencarian = item.nama.toLowerCase().includes(dataForm.pencarian.toLowerCase());
+    const matchKategori = !dataForm.filterKategori || item.kategori === dataForm.filterKategori;
+    const matchProvinsi = !dataForm.filterProvinsi || item.provinsi === dataForm.filterProvinsi;
     
-    // Gabungkan ketiganya
-    return cekNama && cekKategori && cekProvinsi;
+    return matchPencarian && matchKategori && matchProvinsi;
   });
 
   return (
     <div className="p-5 max-w-5xl mx-auto font-sans">
       <h1 className="text-3xl font-bold text-center mb-5 text-gray-800">Sistem Informasi Wisata</h1>
 
-      {/* Tombol Guest / Admin */}
       <div className="flex justify-center gap-4 mb-5">
         <button 
           onClick={() => setTampilan("guest")}
@@ -40,17 +52,25 @@ export default function DashboardWisata() {
         </button>
       </div>
 
-      {/* Area Input Pencarian & Filter */}
       <div className="bg-white p-4 shadow rounded flex flex-col md:flex-row gap-4 mb-5">
+        {/* PENTING: Tambahkan atribut name="" yang nilainya SAMA PERSIS 
+          dengan nama properti di dalam state dataForm 
+        */}
         <input 
           type="text" 
+          name="pencarian" 
           placeholder="Cari nama wisata..." 
-          value={pencarian} 
-          onChange={(e) => setPencarian(e.target.value)} 
-          className="p-2 border rounded w-full border-gray-300"
+          value={dataForm.pencarian} 
+          onChange={handleChange} 
+          className="p-2 border rounded w-full border-gray-300 outline-none focus:ring-2 focus:ring-blue-400"
         />
         
-        <select value={filterKategori} onChange={(e) => setFilterKategori(e.target.value)} className="p-2 border rounded w-full">
+        <select 
+          name="filterKategori" 
+          value={dataForm.filterKategori} 
+          onChange={handleChange} 
+          className="p-2 border rounded w-full outline-none focus:ring-2 focus:ring-blue-400"
+        >
           <option value="">-- Semua Kategori --</option>
           <option value="Alam">Alam</option>
           <option value="Sejarah">Sejarah</option>
@@ -58,7 +78,12 @@ export default function DashboardWisata() {
           <option value="Budaya">Budaya</option>
         </select>
 
-        <select value={filterProvinsi} onChange={(e) => setFilterProvinsi(e.target.value)} className="p-2 border rounded w-full">
+        <select 
+          name="filterProvinsi" 
+          value={dataForm.filterProvinsi} 
+          onChange={handleChange} 
+          className="p-2 border rounded w-full outline-none focus:ring-2 focus:ring-blue-400"
+        >
           <option value="">-- Semua Provinsi --</option>
           <option value="Bali">Bali</option>
           <option value="Jakarta">Jakarta</option>
@@ -68,16 +93,17 @@ export default function DashboardWisata() {
         </select>
       </div>
 
-      {/* Conditional Rendering Tampilan */}
       {tampilan === "guest" ? (
-        // Grid Design Tailwind untuk Guest (Responsive)
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {hasilFilter.map((item) => (
-            <CardGuest key={item.id} dataWisata={item} />
-          ))}
+          {hasilFilter.length > 0 ? (
+            hasilFilter.map((item) => (
+              <CardGuest key={item.id} dataWisata={item} />
+            ))
+          ) : (
+            <p className="col-span-full text-center font-bold text-red-500">Wisata tidak ditemukan.</p>
+          )}
         </div>
       ) : (
-        // Tampilan Tabel untuk Admin
         <TabelAdmin semuaData={hasilFilter} />
       )}
     </div>
