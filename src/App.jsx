@@ -4,8 +4,9 @@ import viteLogo from "/vite.svg";
 import "./assets/tailwind.css";
 const Dashboard = React.lazy(() => import("./pages/Dashboard"))
 const Header = React.lazy(() => import("./components/Header"))
-const Customers = React.lazy(() => import("./pages/Customers"))
-const Orders = React.lazy(() => import("./pages/Orders"))
+const Patients = React.lazy(() => import("./pages/Patients"))
+const Appointments = React.lazy(() => import("./pages/Appointments"))
+const Services = React.lazy(() => import("./pages/Services"))
 const ErrorPage = React.lazy(() => import("./pages/ErrorPage"))
 const Login = React.lazy(() => import("./pages/auth/Login"))
 const Register = React.lazy(() => import("./pages/auth/Register"))
@@ -26,8 +27,9 @@ function App() {
     <Routes>
       <Route element={<MainLayout/>}>
       <Route path="/" element={<Dashboard />} />
-      <Route path="/orders" element={<Orders />} />
-      <Route path="/customers" element={<Customers />} />
+      <Route path="/patients" element={<Patients />} />
+      <Route path="/appointments" element={<Appointments />} />
+      <Route path="/services" element={<Services />} />
       <Route path="*" element={<NotFound errorCode="404" errorDescription="Sorry, we were unable to find that page" errorImage="/image_9dca28.jpg" />} />
       <Route path="/error-400" element={<NotFound errorCode="400" errorDescription="Bad Request. Server cannot process the request." />} />
       <Route path="/error-401" element={<NotFound errorCode="401" errorDescription="Unauthorized. You lack valid authentication credentials." />} />
