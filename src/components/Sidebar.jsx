@@ -1,44 +1,48 @@
-import { FaHome, FaUserInjured, FaSpa, FaCalendarAlt, FaPlus, FaBan, FaHeart } from "react-icons/fa";
-import { Link, NavLink } from "react-router-dom"
+import { FaHome, FaUserInjured, FaSpa, FaCalendarAlt, FaCog, FaQuestionCircle, FaBan } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
-      const menuClass = ({ isActive }) =>
-        `flex cursor-pointer items-center rounded-xl p-4  space-x-2
-        ${isActive ?
-            "text-pink-600 bg-pink-100 font-extrabold" :
-            "text-gray-600 hover:text-pink-600 hover:bg-pink-100 hover:font-extrabold"
-        }`
+  // Menggunakan styling biru modern ala Shopeers referensi
+  const menuClass = ({ isActive }) =>
+    `flex cursor-pointer items-center rounded-xl p-3 my-1 font-medium text-sm transition-all
+    ${isActive ? 
+        "text-blue-600 bg-blue-50" : 
+        "text-gray-500 hover:text-blue-600 hover:bg-blue-50"
+    }`
+
   return (
-    <div id="sidebar" className="flex flex-col min-h-screen w-80 bg-white p-8 shadow-lg">
-      <div id="sidebar-logo" className="flex flex-col mb-10">
-        <span id="logo-title" className="font-poppins text-[48px] text-gray-900 font-bold leading-none">
-          GlowCare<b id="logo-dot" className="text-pink-500">.</b>
-        </span>
-        <span id="logo-subtitle" className="font-semibold text-gray-400 text-sm">
-          Beauty Clinic Admin Dashboard
-        </span>
+    <div className="flex flex-col min-h-screen w-64 bg-white border-r border-gray-100 p-6">
+      
+      {/* --- LOGO AREA --- */}
+      <div className="flex items-center space-x-2 mb-10">
+        <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            {/* Mengubah inisial menjadi 'G' untuk GlowCare */}
+            <span className="text-white font-bold text-xl">G</span>
+        </div>
+        <span className="font-bold text-xl text-gray-800 tracking-tight">GlowCare</span>
       </div>
 
-      <div id="sidebar-menu" className="mt-10 flex-1">
-        <ul id="menu-list" className="space-y-3">
+      {/* --- MENU NAVIGASI UTAMA --- */}
+      <div className="flex-1 overflow-y-auto">
+        <ul className="space-y-1">
           <li>
-            <NavLink id="menu-1" to="/" className={menuClass}>
-              <FaHome className="mr-4 text-xl" /> Dashboard
+            <NavLink to="/" className={menuClass}>
+              <FaHome className="mr-3 text-lg" /> Dashboard
             </NavLink>
           </li>
           <li>
-            <NavLink id="menu-2" to="/patients" className={menuClass}>
-              <FaUserInjured className="mr-4 text-xl" /> Patient List
+            <NavLink to="/patients" className={menuClass}>
+              <FaUserInjured className="mr-3 text-lg" /> Patient List
             </NavLink>
           </li>
           <li>
-            <NavLink id="menu-3" to="/appointments" className={menuClass}>
-              <FaCalendarAlt className="mr-4 text-xl" /> Appointments
+            <NavLink to="/appointments" className={menuClass}>
+              <FaCalendarAlt className="mr-3 text-lg" /> Appointments
             </NavLink>
           </li>
           <li>
-            <NavLink id="menu-4" to="/services" className={menuClass}>
-              <FaSpa className="mr-4 text-xl" /> Services
+            <NavLink to="/services" className={menuClass}>
+              <FaSpa className="mr-3 text-lg" /> Services
             </NavLink>
           </li>
           <li>
@@ -59,20 +63,30 @@ export default function Sidebar() {
         </ul>
       </div>
 
-      <div id="sidebar-footer" className="mt-auto">
-        <div id="footer-card" className="bg-gradient-to-r from-pink-500 to-rose-500 px-4 py-4 rounded-xl shadow-lg mb-6 flex flex-col items-center">
-          <div id="footer-text" className="text-white text-sm text-center mb-3">
-            <span>Manage your clinic services through button below!</span>
+      {/* --- FOOTER & SETTING --- */}
+      <div className="mt-auto pt-6 border-t border-gray-100 space-y-1">
+          <NavLink to="/settings" className={menuClass}>
+            <FaCog className="mr-3 text-lg" /> Settings
+          </NavLink>
+          <NavLink to="/help" className={menuClass}>
+            <FaQuestionCircle className="mr-3 text-lg" /> Help & Support
+          </NavLink>
+          
+          {/* Upgrade Card ala Shopeers, disesuaikan teksnya untuk Klinik */}
+          <div className="mt-6 bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-5 text-white shadow-lg shadow-blue-600/30">
+             <div className="bg-white/20 w-10 h-10 rounded-full flex items-center justify-center mb-3">
+                 <FaSpa />
+             </div>
+             <h4 className="font-bold mb-1">Upgrade to Premium!</h4>
+             <p className="text-xs text-blue-100 mb-4 opacity-80">
+               Unlock full clinic management features and reports.
+             </p>
+             <button className="w-full bg-blue-500 hover:bg-blue-400 py-2 rounded-xl text-sm font-semibold transition-colors">
+               Upgrade premium
+             </button>
           </div>
-          <div id="add-menu-button" className="flex justify-center items-center p-2 bg-white rounded-md space-x-2 text-gray-600 w-full cursor-pointer hover:bg-gray-100">
-            <FaPlus /> <span>Add Service</span>
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-            <span id="footer-brand" className="font-bold text-gray-400 text-sm">GlowCare Beauty Clinic Dashboard</span>
-        </div>
-        <p id="footer-copyright" className="font-light text-gray-400 text-xs mt-1">&copy; 2025 All Right Reserved</p>
       </div>
+      
     </div>
   );
 }

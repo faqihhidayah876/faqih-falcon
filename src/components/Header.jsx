@@ -1,46 +1,51 @@
-import { FaBell, FaSearch } from "react-icons/fa";
+import { FaBell, FaSearch, FaRegBell, FaRegSun } from "react-icons/fa";
 import { FcAreaChart } from "react-icons/fc";
 import { SlSettings } from "react-icons/sl";
 
 export default function Header() {
   return (
-    <div id="header-container" className="flex justify-between items-center p-4 mb-6 bg-transparent">
-      <div id="search-bar" className="relative w-full max-w-lg">
+    <div id="header-container" className="flex justify-between items-center p-4 mb-4 bg-transparent font-inter">
+      
+      {/* --- KIRI: Search Bar ala Shopeers --- */}
+      <div id="search-bar" className="relative w-full max-w-md flex items-center">
+        <FaSearch className="absolute left-4 text-gray-400 text-sm" />
         <input
           id="search-input"
           type="text"
-          placeholder="Search Here..."
-          className="border border-gray-100 p-3 pr-10 bg-white w-full rounded-xl outline-none shadow-sm"
+          placeholder="Search anything..."
+          className="w-full bg-gray-50 border border-gray-100 py-2.5 pl-10 pr-16 rounded-full text-sm outline-none focus:bg-white focus:ring-2 focus:ring-gray-100 transition-all text-gray-600 placeholder-gray-400"
         />
-        <FaSearch id="search-icon" className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-300" />
+        {/* Aksen Shortcut Keyboard "⌘ K" */}
+        <div className="absolute right-2 flex items-center justify-center bg-white border border-gray-200 rounded-full px-2.5 py-1 text-[10px] text-gray-400 font-semibold shadow-sm">
+          ⌘ K
+        </div>
       </div>
 
-      <div id="icons-container" className="flex items-center space-x-6">
-        <div className="flex space-x-4">
-            <div id="notification-icon" className="relative p-3 bg-blue-100 rounded-2xl text-blue-500 cursor-pointer">
-            <FaBell />
-            <span id="notification-badge" className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 
-            bg-red-500 text-white rounded-full px-2 py-0.5 text-xs animate-pulse ring-2 ring-white">50</span>
-            </div>
-            <div id="chart-icon" className="p-3 bg-blue-100 rounded-2xl cursor-pointer">
-            <FcAreaChart />
-            </div>
-            <div id="settings-icon" className="p-3 bg-red-100 rounded-2xl text-red-500 cursor-pointer">
-            <SlSettings />
-            </div>
-        </div>
+      {/* --- KANAN: Icons & Profile --- */}
+      <div id="icons-container" className="flex items-center space-x-3 md:space-x-5">
+        
+        {/* Ikon Light/Dark Mode (Sun) */}
+        <button className="w-10 h-10 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition-colors border border-transparent hover:border-gray-200">
+          <FaRegSun className="text-lg" />
+        </button>
 
-        <div id="profile-container" className="flex items-center space-x-4 border-l pl-6 border-gray-300">
-          <span id="profile-text" className="text-gray-600">
-            Hello, <b>Faqih Hidayah</b>
-          </span>
+        {/* Ikon Notifikasi (Bell) */}
+        <button className="relative w-10 h-10 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition-colors border border-transparent hover:border-gray-200">
+          <FaRegBell className="text-lg" />
+          {/* Titik Notifikasi Kecil di sudut kanan atas bel */}
+          <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-gray-800 rounded-full border border-white"></span>
+        </button>
+
+        {/* Profile Avatar (Hanya gambar, tanpa teks) */}
+        <div className="pl-2">
           <img
             id="profile-avatar"
-            src="https://avatar.iran.liara.run/public/28"
-            className="w-12 h-12 rounded-full shadow-sm"
+            src="https://i.ibb.co.com/JW8fVNyW/1777967923-muka.png"
+            className="w-10 h-10 rounded-full border border-gray-200 shadow-sm cursor-pointer hover:ring-2 hover:ring-gray-100 transition-all"
             alt="Profile"
           />
         </div>
+
       </div>
     </div>
   );

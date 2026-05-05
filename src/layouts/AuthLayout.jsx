@@ -1,26 +1,26 @@
 import { Outlet } from "react-router-dom";
-import { FaHeart } from "react-icons/fa";
 
 export default function AuthLayout() {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100">
-            <div className="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md border border-pink-100">
-                <div className="flex flex-col items-center justify-center mb-6">
-                    <div className="bg-gradient-to-r from-pink-500 to-rose-500 rounded-full p-3 mb-3 shadow-lg">
-                        <FaHeart className="text-white text-3xl" />
-                    </div>
-                    <h1 className="text-4xl font-poppins font-extrabold text-gray-800">
-                        <span className="text-black">GlowCare</span>
-                        <span className="text-pink-500">.</span>
-                    </h1>
-                    <p className="text-sm text-gray-500 mt-2">Beauty Clinic Admin Dashboard</p>
+        <div className="min-h-screen flex bg-white font-poppins">
+            {/* Bagian Kiri: Form Container */}
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-8 sm:p-12 md:p-24">
+                <div className="w-full max-w-md">
+                    <Outlet/>
                 </div>
+            </div>
 
-                <Outlet/>
-
-                <p className="text-center text-xs text-gray-400 mt-6">
-                    © 2025 GlowCare Beauty Clinic. All rights reserved.
-                </p>
+            {/* Bagian Kanan: Visual/Ilustrasi (Disembunyikan di layar kecil) */}
+            <div className="hidden lg:flex w-1/2 p-6">
+                {/* HAPUS gradient orange dari sini, ganti jadi bg-gray-100 */}
+                <div className="w-full h-full relative rounded-[40px] overflow-hidden bg-gray-100 shadow-2xl">
+                    <img 
+                        src="https://i.ibb.co.com/QjmG4rLH/1777967923.png" 
+                        alt="Welcome Illustration" 
+                        /* HAPUS mix-blend-overlay dan opacity-90 agar gambar tampil normal */
+                        className="w-full h-full object-cover" 
+                    />
+                </div>
             </div>
         </div>
     )
