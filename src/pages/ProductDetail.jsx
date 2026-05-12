@@ -1,18 +1,30 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { FaArrowLeft, FaCheckCircle, FaStar, FaBox } from "react-icons/fa";
+import { FaArrowLeft, FaCheckCircle, FaStar, FaBox, FaLeaf } from "react-icons/fa";
+// 1. Import data JSON lokal Anda
+import productData from "../data/ProductData.json"; 
 
 export default function ProductDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [product, setProduct] = useState(null);
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        axios.get(`https://dummyjson.com/products/${id}`)
-            .then((res) => setProduct(res.data))
-            .catch((err) => setError("Product not found in beauty database"));
+        // Simulasi loading sebentar agar transisi halaman terlihat profesional
+        setIsLoading(true);
+        setTimeout(() => {
+            // Mencari produk di JSON lokal berdasarkan ID
+            const foundProduct = productData.find((p) => String(p.id) === String(id));
+            
+            if (foundProduct) {
+                setProduct(foundProduct);
+            } else {
+                setError("Product not found in our beauty clinic database.");
+            }
+            setIsLoading(false);
+        }, 400); // loading 400ms
     }, [id]);
 
     if (error) return (
@@ -23,7 +35,7 @@ export default function ProductDetail() {
         </div>
     );
     
-    if (!product) return (
+    if (isLoading || !product) return (
         <div className="flex justify-center mt-20">
             <div className="animate-pulse flex items-center gap-3 text-teal-600 font-semibold bg-teal-50 px-6 py-3 rounded-full">
                 <div className="w-5 h-5 border-2 border-teal-600 border-t-transparent rounded-full animate-spin"></div>
@@ -31,6 +43,12 @@ export default function ProductDetail() {
             </div>
         </div>
     );
+
+    // Placeholder image elegan bernuansa klinik/skincare
+    const defaultImage = "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+    
+    // Deskripsi default karena di JSON tidak ada
+    const defaultDescription = `Tingkatkan rutinitas perawatan kulit Anda dengan ${product.title} dari ${product.brand}. Diformulasikan khusus oleh ahli dermatologi kami dengan bahan-bahan aktif premium untuk memberikan hasil maksimal, menjaga kelembapan, dan memancarkan kecantikan alami kulit Anda.`;
 
     return (
         <div className="p-4 md:p-8 max-w-5xl mx-auto font-inter">
@@ -48,27 +66,27 @@ export default function ProductDetail() {
                 
                 {/* Image Section */}
                 <div className="lg:w-1/2 bg-gradient-to-br from-teal-50 to-gray-50 p-8 flex items-center justify-center relative">
-                    <div className="absolute top-6 left-6 bg-white/80 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold text-teal-700 uppercase tracking-widest shadow-sm">
-                        {product.category}
+                    <div className="absolute top-6 left-6 bg-white/80 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold text-teal-700 uppercase tracking-widest shadow-sm flex items-center gap-1.5">
+                        <FaLeaf size={10} /> {product.category}
                     </div>
                     <img 
-                        src={product.thumbnail} 
+                        src={defaultImage} 
                         alt={product.title} 
-                        className="rounded-2xl shadow-xl w-full max-w-md h-auto object-cover transform hover:scale-[1.02] transition-transform duration-500 border-4 border-white" 
+                        className="rounded-2xl shadow-xl w-full max-w-md h-[400px] object-cover transform hover:scale-[1.02] transition-transform duration-500 border-4 border-white" 
                     />
                 </div>
 
                 {/* Content Section */}
                 <div className="lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center">
                     <div className="mb-2 text-sm font-semibold text-teal-600 tracking-wide uppercase">
-                        {product.brand || "Exclusive Brand"}
+                        {product.brand}
                     </div>
                     <h2 className="text-3xl lg:text-4xl font-extrabold text-gray-900 mb-4 leading-tight">
                         {product.title}
                     </h2>
                     
                     <p className="text-gray-500 text-base leading-relaxed mb-8">
-                        {product.description}
+                        {defaultDescription}
                     </p>
 
                     <div className="grid grid-cols-2 gap-4 mb-8">
@@ -78,7 +96,7 @@ export default function ProductDetail() {
                             </div>
                             <div>
                                 <p className="text-xs text-gray-400 font-medium">Rating</p>
-                                <p className="font-bold text-gray-800">{product.rating} / 5.0</p>
+                                <p className="font-bold text-gray-800">4.9 / 5.0</p>
                             </div>
                         </div>
                         <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 flex items-center gap-4">
@@ -97,7 +115,8 @@ export default function ProductDetail() {
                             <div>
                                 <p className="text-teal-100 text-sm font-medium mb-1">Retail Price</p>
                                 <p className="text-3xl font-black">
-                                    Rp {(product.price * 15000).toLocaleString('id-ID')}
+                                    {/* Menggunakan data price langsung dari JSON lokal Anda */}
+                                    Rp {product.price.toLocaleString('id-ID')}
                                 </p>
                             </div>
                             <div className="bg-teal-500/50 p-4 rounded-2xl backdrop-blur-sm">
