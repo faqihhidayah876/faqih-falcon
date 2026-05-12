@@ -14,6 +14,8 @@ const Forgot = React.lazy(() => import("./pages/auth/Forgot"))
 const Sidebar = React.lazy(() => import("./components/Sidebar"))
 const MainLayout = React.lazy(() => import("./layouts/MainLayout"))
 const AuthLayout = React.lazy(() => import("./layouts/AuthLayout"))
+const Products = React.lazy(() => import("./pages/Products"));
+const ProductDetail = React.lazy(() => import("./pages/ProductDetail"));
 import Loading from "./components/Loading";
 import { Route, Routes } from "react-router-dom";
 import NotFound from "./pages/ErrorPage";
@@ -30,6 +32,8 @@ function App() {
       <Route path="/patients" element={<Patients />} />
       <Route path="/appointments" element={<Appointments />} />
       <Route path="/services" element={<Services />} />
+      <Route path="/products" element={<Products />} />
+      <Route path="/products/:id" element={<ProductDetail />} />
       <Route path="*" element={<NotFound errorCode="404" errorDescription="Sorry, we were unable to find that page" errorImage="/image_9dca28.jpg" />} />
       <Route path="/error-400" element={<NotFound errorCode="400" errorDescription="Bad Request. Server cannot process the request." />} />
       <Route path="/error-401" element={<NotFound errorCode="401" errorDescription="Unauthorized. You lack valid authentication credentials." />} />

@@ -1,0 +1,66 @@
+[
+    {
+        "id": "1",
+        "title": "Brightening Facial Wash",
+        "category": "Skincare",
+        "brand": "Falcon Beauty",
+        "price": 85000,
+        "stock": 50
+    },
+    {
+        "id": "2",
+        "title": "Hydrating Face Toner",
+        "category": "Skincare",
+        "brand": "Falcon Beauty",
+        "price": 95000,
+        "stock": 40
+    },
+    {
+        "id": "3",
+        "title": "Advanced Glow Serum",
+        "category": "Serum",
+        "brand": "Falcon Beauty",
+        "price": 150000,
+        "stock": 25
+    },
+    {
+        "id": "4",
+        "title": "Sunscreen Gel SPF 50",
+        "category": "Protection",
+        "brand": "Falcon Beauty",
+        "price": 120000,
+        "stock": 60
+    },
+    {
+        "id": "5",
+        "title": "Night Repair Cream",
+        "category": "Skincare",
+        "brand": "Falcon Beauty",
+        "price": 135000,
+        "stock": 30
+    },
+    {
+        "id": "6",
+        "title": "Anti-Aging Eye Cream",
+        "category": "Skincare",
+        "brand": "Falcon Beauty",
+        "price": 110000,
+        "stock": 20
+    },
+    {
+        "id": "7",
+        "title": "Clay Mask Detox",
+        "category": "Skincare",
+        "brand": "Falcon Beauty",
+        "price": 75000,
+        "stock": 45
+    },
+    {
+        "id": "8",
+        "title": "Micellar Water Sensitive",
+        "category": "Cleanser",
+        "brand": "Falcon Beauty",
+        "price": 65000,
+        "stock": 55
+    }
+]
