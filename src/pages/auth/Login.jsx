@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BsFillExclamationDiamondFill } from "react-icons/bs";
 import { ImSpinner2 } from "react-icons/im";
-import { FaHeart, FaUser, FaLock, FaGoogle, FaFacebook } from "react-icons/fa";
+import { FaUser, FaLock, FaGoogle, FaFacebook } from "react-icons/fa";
+
+import InputField from "../../components/InputField";
+import Button from "../../components/Button";
+import Divider from "../../components/Divider";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -25,7 +29,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(false);
+    setError(""); // Reset error state
 
     axios
       .post("https://dummyjson.com/user/login", {
@@ -37,6 +41,7 @@ export default function Login() {
           setError(response.data.message);
           return;
         }
+        // Jika login sukses, arahkan ke dashboard
         navigate("/");
       })
       .catch((err) => {
@@ -51,101 +56,85 @@ export default function Login() {
       });
   };
 
+  // Notifikasi Error (Bisa juga dipindah ke Alert.jsx nanti)
   const errorInfo = error ? (
-    <div className="bg-rose-100 mb-5 p-5 text-sm font-light text-gray-600 rounded flex items-center border border-rose-200">
-      <BsFillExclamationDiamondFill className="text-rose-600 me-2 text-lg" />
+    <div className="w-full bg-red-50 mb-5 p-4 text-sm font-medium text-red-600 rounded-xl flex items-center border border-red-200 shadow-sm">
+      <BsFillExclamationDiamondFill className="text-red-600 mr-3 text-lg" />
       {error}
     </div>
   ) : null;
 
+  // Notifikasi Loading
   const loadingInfo = loading ? (
-    <div className="bg-pink-100 mb-5 p-5 text-sm rounded flex items-center border border-pink-200">
-      <ImSpinner2 className="me-2 animate-spin text-pink-600" />
+    <div className="w-full bg-blue-50 mb-5 p-4 text-sm font-medium text-blue-600 rounded-xl flex items-center border border-blue-200 shadow-sm">
+      <ImSpinner2 className="mr-3 animate-spin text-blue-600 text-lg" />
       Mohon Tunggu...
     </div>
   ) : null;
 
   return (
-    <div className="flex flex-col items-center w-full">
-      {" "}
+    <div className="flex flex-col items-center w-full font-poppins">
       <h1 className="text-6xl font-smooch font-bold text-gray-900 mb-2 tracking-tight">
         Welcome
-      </h1>{" "}
-      <p className="text-gray-500 mb-10 text-sm">
+      </h1>
+      <p className="text-gray-500 mb-8 text-sm">
         We are glad to see you back with us
       </p>
-      <form
-        className="w-full space-y-5"
-        onSubmit={(e) => {
-          e.preventDefault();
-          navigate("/dashboard");
-        }}
-      >
-        {" "}
-        {/* Input Username/Email */}{" "}
-        <div className="relative">
-          {" "}
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            {" "}
-            <FaUser className="text-gray-400" />{" "}
-          </div>{" "}
-          <input
-            type="text"
-            className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-transparent focus:bg-white focus:border-gray-200 focus:ring-2 focus:ring-gray-100 rounded-2xl text-sm transition-all outline-none"
-            placeholder="Username"
-            required
-          />{" "}
-        </div>
-        {/* Input Password */}{" "}
-        <div className="relative">
-          {" "}
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            {" "}
-            <FaLock className="text-gray-400" />{" "}
-          </div>{" "}
-          <input
-            type="password"
-            className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-transparent focus:bg-white focus:border-gray-200 focus:ring-2 focus:ring-gray-100 rounded-2xl text-sm transition-all outline-none"
-            placeholder="Password"
-            required
-          />{" "}
-        </div>
-        {/* Tombol NEXT */}{" "}
-        <button
-          type="submit"
-          className="w-full bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-gray-900/20 tracking-wide text-sm mt-4"
+
+      {/* Menampilkan notifikasi error / loading di atas form */}
+      {errorInfo}
+      {loadingInfo}
+
+      <form className="w-full space-y-5" onSubmit={handleSubmit}>
+        
+        <InputField
+          name="email"
+          placeholder="Username"
+          icon={<FaUser />}
+          value={dataForm.email}
+          onChange={handleChange}
+          required
+        />
+
+        <InputField
+          type="password"
+          name="password"
+          placeholder="Password"
+          icon={<FaLock />}
+          value={dataForm.password}
+          onChange={handleChange}
+          required
+        />
+
+        {/* Menggunakan Komponen Button Kustom */}
+        <Button 
+          type="dark" 
+          className="w-full py-4 tracking-wide text-sm mt-4"
         >
-          {" "}
-          NEXT{" "}
-        </button>{" "}
+          {loading ? "LOADING..." : "NEXT"}
+        </Button>
       </form>
-      {/* Divider */}{" "}
-      <div className="flex items-center w-full my-8">
-        {" "}
-        <div className="flex-1 border-t border-gray-100"></div>{" "}
-        <span className="px-4 text-sm text-gray-500 font-medium">
-          Login with Others
-        </span>{" "}
-        <div className="flex-1 border-t border-gray-100"></div>{" "}
-      </div>
-      {/* Social Login */}{" "}
+
+      {/* Menggunakan Komponen Divider */}
+      <Divider text="Login with Others" />
+
+      {/* Opsi Login Lainnya */}
       <div className="w-full space-y-3">
-        {" "}
-        <button className="w-full flex items-center justify-center space-x-2 border border-gray-200 py-3 rounded-2xl hover:bg-gray-50 transition-all">
-          {" "}
-          <FaGoogle className="text-red-500" />{" "}
-          <span className="text-sm font-semibold text-gray-700">
-            Login with Google
-          </span>{" "}
-        </button>{" "}
-        <button className="w-full flex items-center justify-center space-x-2 border border-gray-200 py-3 rounded-2xl hover:bg-gray-50 transition-all">
-          {" "}
-          <FaFacebook className="text-blue-600" />{" "}
-          <span className="text-sm font-semibold text-gray-700">
-            Login with Facebook
-          </span>{" "}
-        </button>{" "}
-      </div>{" "}
+        <Button 
+          type="outline" 
+          className="w-full py-3" 
+          icon={<FaGoogle className="text-red-500" />}
+        >
+          Login with Google
+        </Button>
+        <Button 
+          type="outline" 
+          className="w-full py-3" 
+          icon={<FaFacebook className="text-blue-600" />}
+        >
+          Login with Facebook
+        </Button>
+      </div>
     </div>
   );
 }

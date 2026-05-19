@@ -4,27 +4,31 @@ import {
   FaSpa, 
   FaDollarSign, 
   FaDownload, 
-  FaClock, 
   FaCheckCircle 
 } from "react-icons/fa";
 
+// 1. Import komponen-komponen yang sudah kita pisah ke folder components
+import PageHeader from "../components/PageHeader";
+import Button from "../components/Button";
+import KpiCard from "../components/KpiCard";
+import Card from "../components/Card";
+import Table from "../components/Table";
+
 export default function Dashboard() {
+  // Array untuk Header Tabel Popular Services
+  const popularServicesHeaders = ["ID", "Service Name", "Patients", "Revenue"];
+
   return (
     <div className="flex flex-col font-inter">
-      {/* --- HEADER --- */}
-      <div className="flex justify-between items-center mb-8">
-        <div>
-            <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-            <p className="text-sm text-gray-500 mt-1">Welcome back, here is your clinic summary.</p>
-        </div>
-        <div className="flex space-x-3">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-medium shadow-sm shadow-blue-600/20 flex items-center gap-2 transition-all">
-                <FaDownload /> Export
-            </button>
-        </div>
-      </div>
+      <PageHeader 
+        title="Dashboard Overview" 
+        breadcrumb={["Dashboard", "Welcome back, here is your clinic summary."]}
+      >
+        <Button type="primary" icon={<FaDownload />}>
+            Export
+        </Button>
+      </PageHeader>
 
-      {/* --- ROW 1: KPI CARDS --- */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         <KpiCard title="Total Patients" value="16,431" trend="+15.5%" isPositive={true} icon={<FaUserInjured/>} subtext="vs. 14,653 last period" />
         <KpiCard title="Appointments" value="6,225" trend="+8.4%" isPositive={true} icon={<FaCalendarCheck/>} subtext="vs. 5,732 last period" />
@@ -34,8 +38,8 @@ export default function Dashboard() {
 
       {/* --- ROW 2: CHARTS AREA --- */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-         {/* Line Chart (Span 2) */}
-         <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex flex-col">
+         {/* 4. Menggunakan <Card> untuk membungkus Line Chart */}
+         <Card className="lg:col-span-2 p-6 flex flex-col">
              <div className="flex justify-between items-start mb-2">
                  <h3 className="font-bold text-gray-800">Total Profit</h3>
                  <select className="bg-white border border-gray-200 text-sm rounded-lg px-3 py-1.5 outline-none text-gray-600">
@@ -66,15 +70,15 @@ export default function Dashboard() {
                   <circle cx="50" cy="15" r="1.5" fill="white" stroke="#2563eb" strokeWidth="1" />
                 </svg>
              </div>
-         </div>
+         </Card>
 
-         {/* Bar Chart (Span 1) */}
-         <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex flex-col">
+         {/* 5. Menggunakan <Card> untuk membungkus Bar Chart */}
+         <Card className="p-6 flex flex-col">
              <div className="flex justify-between items-center mb-6">
                 <h3 className="font-bold text-gray-800">Most Day Active</h3>
                 <span className="text-gray-400 cursor-pointer">•••</span>
              </div>
-             {/* Bar Chart SVG/HTML (Blue Theme) */}
+             {/* Bar Chart */}
              <div className="flex-1 flex items-end justify-between gap-3 pt-4">
                 <Bar day="Sun" height="h-16" isToday={false} />
                 <Bar day="Mon" height="h-20" isToday={false} />
@@ -84,60 +88,49 @@ export default function Dashboard() {
                 <Bar day="Fri" height="h-28" isToday={false} />
                 <Bar day="Sat" height="h-10" isToday={false} />
              </div>
-         </div>
+         </Card>
       </div>
 
       {/* --- ROW 3: WIDGETS --- */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Popular Services Table (Like Best Selling Products) */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden p-6">
+        
+        {/* Popular Services Table */}
+        <Card className="lg:col-span-2 p-6">
             <div className="flex justify-between items-center mb-6">
                 <h3 className="font-bold text-gray-800">Popular Services</h3>
                 <span className="text-gray-400 cursor-pointer">•••</span>
             </div>
-            <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse text-sm">
-                    <thead>
-                        <tr className="border-b border-gray-100 text-gray-400 uppercase text-xs tracking-wider">
-                            <th className="pb-3 font-semibold">ID</th>
-                            <th className="pb-3 font-semibold">Service Name</th>
-                            <th className="pb-3 font-semibold">Patients</th>
-                            <th className="pb-3 font-semibold">Revenue</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-50">
-                        <tr className="hover:bg-gray-50 transition-colors">
-                            <td className="py-4 text-gray-500">#83009</td>
-                            <td className="py-4 font-medium text-gray-800 flex items-center gap-3">
-                                <FaSpa className="text-blue-500" /> Acne Laser Treatment
-                            </td>
-                            <td className="py-4 text-gray-600">2,310 treated</td>
-                            <td className="py-4 font-semibold text-green-500">$124.839</td>
-                        </tr>
-                        <tr className="hover:bg-gray-50 transition-colors">
-                            <td className="py-4 text-gray-500">#83001</td>
-                            <td className="py-4 font-medium text-gray-800 flex items-center gap-3">
-                                <FaUserInjured className="text-blue-500" /> Full Body Peeling
-                            </td>
-                            <td className="py-4 text-gray-600">1,230 treated</td>
-                            <td className="py-4 font-semibold text-green-500">$92.662</td>
-                        </tr>
-                        <tr className="hover:bg-gray-50 transition-colors">
-                            <td className="py-4 text-gray-500">#83004</td>
-                            <td className="py-4 font-medium text-gray-800 flex items-center gap-3">
-                                <FaCalendarCheck className="text-blue-500" /> Routine Facial
-                            </td>
-                            <td className="py-4 text-gray-600">812 treated</td>
-                            <td className="py-4 font-semibold text-green-500">$74.048</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+            {/* 6. Menggunakan komponen <Table> kustom untuk menggantikan tag <table> HTML bawaan */}
+            <Table headers={popularServicesHeaders}>
+                <tr className="hover:bg-gray-50 transition-colors">
+                    <td className="py-4 text-gray-500 px-6">#83009</td>
+                    <td className="py-4 font-medium text-gray-800 flex items-center gap-3 px-6">
+                        <FaSpa className="text-blue-500" /> Acne Laser Treatment
+                    </td>
+                    <td className="py-4 text-gray-600 px-6">2,310 treated</td>
+                    <td className="py-4 font-semibold text-green-500 px-6">$124.839</td>
+                </tr>
+                <tr className="hover:bg-gray-50 transition-colors">
+                    <td className="py-4 text-gray-500 px-6">#83001</td>
+                    <td className="py-4 font-medium text-gray-800 flex items-center gap-3 px-6">
+                        <FaUserInjured className="text-blue-500" /> Full Body Peeling
+                    </td>
+                    <td className="py-4 text-gray-600 px-6">1,230 treated</td>
+                    <td className="py-4 font-semibold text-green-500 px-6">$92.662</td>
+                </tr>
+                <tr className="hover:bg-gray-50 transition-colors">
+                    <td className="py-4 text-gray-500 px-6">#83004</td>
+                    <td className="py-4 font-medium text-gray-800 flex items-center gap-3 px-6">
+                        <FaCalendarCheck className="text-blue-500" /> Routine Facial
+                    </td>
+                    <td className="py-4 text-gray-600 px-6">812 treated</td>
+                    <td className="py-4 font-semibold text-green-500 px-6">$74.048</td>
+                </tr>
+            </Table>
+        </Card>
 
         {/* Action / Assistant Widget */}
-        <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm flex flex-col items-center justify-center text-center relative overflow-hidden">
-            {/* Background decoration */}
+        <Card className="p-6 flex flex-col items-center justify-center text-center relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full blur-3xl -z-10"></div>
             
             <div className="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-3xl mb-4 shadow-inner">
@@ -145,35 +138,19 @@ export default function Dashboard() {
             </div>
             <h3 className="font-bold text-gray-800 text-lg mb-2">Ready for Today!</h3>
             <p className="text-sm text-gray-500 mb-6">You have 45 appointments scheduled for today. Make sure to check the calendar.</p>
-            <button className="w-full bg-blue-50 text-blue-600 font-semibold py-3 rounded-xl hover:bg-blue-100 transition-colors">
+            
+            {/* 7. Menggunakan komponen <Button> type outline */}
+            <Button type="outline" className="w-full">
                 View Schedule
-            </button>
-        </div>
+            </Button>
+        </Card>
       </div>
     </div>
   );
 }
 
-// --- SUB COMPONENTS ---
-
-function KpiCard({ title, value, trend, isPositive, icon, subtext }) {
-    return (
-        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
-            <div className="flex justify-between items-start mb-4">
-                <span className="text-sm font-semibold text-gray-600">{title}</span>
-                <span className="text-blue-600 bg-blue-50 p-2 rounded-lg">{icon}</span>
-            </div>
-            <div className="flex items-baseline space-x-3 mb-2">
-                <span className="text-3xl font-bold text-gray-900 tracking-tight">{value}</span>
-                <span className={`text-xs font-bold px-2 py-1 rounded-md ${isPositive ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50'}`}>
-                    {isPositive ? '▲' : '▼'} {trend}
-                </span>
-            </div>
-            <span className="text-xs text-gray-400">{subtext}</span>
-        </div>
-    )
-}
-
+// --- SUB COMPONENTS LOKAL ---
+// Bar chart sengaja dibiarkan lokal di sini karena ini adalah komponen yang spesifik HANYA dipakai di grafik Most Day Active ini saja.
 function Bar({ day, height, isToday, value }) {
     return (
         <div className="flex flex-col items-center gap-2 w-full group cursor-pointer">
