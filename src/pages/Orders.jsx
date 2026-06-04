@@ -1,8 +1,30 @@
-import { FaShoppingCart, FaTruck, FaBan, FaDollarSign, FaPlus } from "react-icons/fa";
-import PageHeader from "../components/PageHeader";
+import { useState } from "react";
+import { FaPlus, FaShoppingCart } from "react-icons/fa";
 import ordersData from "../data/OrderData.json";
-import { useState } from "react"; 
-import { FaTimes } from "react-icons/fa";
+
+// Import Komponen Kustom
+import PageHeader from "../components/PageHeader";
+import Button from "../components/Button";
+import Card from "../components/Card";
+import Badge from "../components/Badge";
+import InputField from "../components/InputField";
+import SelectField from "../components/SelectField";
+
+// Import Komponen SHADCN UI
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export default function Orders() {
   const [orders, setOrders] = useState(ordersData);
@@ -17,65 +39,129 @@ export default function Orders() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setOrders([formData, ...orders]);
-    setIsModalOpen(false);
+    setIsModalOpen(false); 
     setFormData({ orderId: "", customerName: "", status: "Pending", totalPrice: "", orderDate: "" });
   };
+
+  // Helper untuk menentukan warna Badge status
+  const getStatusBadgeType = (status) => {
+    if (status === 'Completed') return 'success'; // Hijau
+    if (status === 'Pending') return 'pending';   // Kuning/Amber
+    return 'danger';                              // Merah (Cancelled)
+  };
+
   return (
-    <div className="flex flex-col">
-      <PageHeader title="Orders" breadcrumb={["Dashboard", "Order List"]}>
-        <button onClick={() => setIsModalOpen(true)} className="bg-hijau hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 font-medium shadow-sm transition-colors">
-          <FaPlus /> <span>Add Orders</span>
-        </button>
+    <div className="flex flex-col font-inter">
+      {/* 1. Header Menggunakan PageHeader */}
+      <PageHeader title="Orders Directory" breadcrumb={["Dashboard", "Order List"]}>
+        <Button onClick={() => setIsModalOpen(true)} icon={<FaPlus />}>
+          Add Order
+        </Button>
       </PageHeader>
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 mt-4">
-        <table className="min-w-full text-left text-sm">
-          <thead className="bg-gray-50 border-b border-gray-100 text-gray-600">
-            <tr>
-              <th className="px-6 py-4 font-semibold">Order ID</th>
-              <th className="px-6 py-4 font-semibold">Customer Name</th>
-              <th className="px-6 py-4 font-semibold">Status</th>
-              <th className="px-6 py-4 font-semibold">Total Price</th>
-              <th className="px-6 py-4 font-semibold">Order Date</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
+
+      {/* 2. Tabel Menggunakan Shadcn UI */}
+      <Card className="mt-4 p-2">
+        <Table>
+          <TableHeader className="bg-gray-50/50">
+            <TableRow>
+              <TableHead className="font-semibold text-gray-500">Order ID</TableHead>
+              <TableHead className="font-semibold text-gray-500">Customer Name</TableHead>
+              <TableHead className="font-semibold text-gray-500">Status</TableHead>
+              <TableHead className="font-semibold text-gray-500">Total Price</TableHead>
+              <TableHead className="font-semibold text-gray-500">Order Date</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {orders.map((order, idx) => (
-              <tr key={idx} className="hover:bg-gray-50">
-                <td className="px-6 py-3 font-medium text-gray-900">{order.orderId}</td>
-                <td className="px-6 py-3 text-gray-600">{order.customerName}</td>
-                <td className="px-6 py-3">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${order.status === 'Completed' ? 'bg-green-100 text-green-700' : order.status === 'Pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+              <TableRow key={idx} className="hover:bg-gray-50 transition-colors border-b border-gray-50">
+                <TableCell className="font-semibold text-gray-800 flex items-center gap-3 py-4">
+                  <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs">
+                    <FaShoppingCart />
+                  </div>
+                  {order.orderId}
+                </TableCell>
+                <TableCell className="font-medium text-gray-500">{order.customerName}</TableCell>
+                <TableCell>
+                  <Badge type={getStatusBadgeType(order.status)}>
                     {order.status}
-                  </span>
-                </td>
-                <td className="px-6 py-3 text-gray-600">{order.totalPrice}</td>
-                <td className="px-6 py-3 text-gray-600">{order.orderDate}</td>
-              </tr>
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-gray-500 font-medium">{order.totalPrice}</TableCell>
+                <TableCell className="text-gray-500">{order.orderDate}</TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl w-full max-w-md p-6 relative shadow-2xl">
-            <button onClick={() => setIsModalOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-red-500">
-              <FaTimes size={20} />
-            </button>
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Add New Order</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div><label className="block text-sm font-medium text-gray-700 mb-1">Order ID</label><input type="text" name="orderId" value={formData.orderId} onChange={handleInputChange} required className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-hijau focus:ring-1 focus:ring-hijau" placeholder="ORD-9999" /></div>
-              <div><label className="block text-sm font-medium text-gray-700 mb-1">Customer Name</label><input type="text" name="customerName" value={formData.customerName} onChange={handleInputChange} required className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-hijau focus:ring-1 focus:ring-hijau" placeholder="John Doe" /></div>
-              <div><label className="block text-sm font-medium text-gray-700 mb-1">Total Price</label><input type="text" name="totalPrice" value={formData.totalPrice} onChange={handleInputChange} required className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-hijau focus:ring-1 focus:ring-hijau" placeholder="Rp 500000" /></div>
-              <div><label className="block text-sm font-medium text-gray-700 mb-1">Order Date</label><input type="date" name="orderDate" value={formData.orderDate} onChange={handleInputChange} required className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-hijau focus:ring-1 focus:ring-hijau" /></div>
-              <div><label className="block text-sm font-medium text-gray-700 mb-1">Status</label><select name="status" value={formData.status} onChange={handleInputChange} className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-hijau focus:ring-1 focus:ring-hijau"><option value="Pending">Pending</option><option value="Completed">Completed</option><option value="Cancelled">Cancelled</option></select></div>
-              <div className="pt-4 flex justify-end">
-                <button type="button" onClick={() => setIsModalOpen(false)} className="mr-3 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
-                <button type="submit" className="px-4 py-2 bg-hijau text-white rounded-lg hover:bg-green-600 font-medium shadow-sm">Save Order</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+          </TableBody>
+        </Table>
+      </Card>
+
+      {/* 3. Modal Form Menggunakan Shadcn Dialog */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-md bg-white rounded-2xl p-6">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-gray-800 mb-2">
+              Add New Order
+            </DialogTitle>
+          </DialogHeader>
+          
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <InputField 
+              label="Order ID" 
+              name="orderId" 
+              value={formData.orderId} 
+              onChange={handleInputChange} 
+              placeholder="ORD-9999" 
+              required 
+            />
+            <InputField 
+              label="Customer Name" 
+              name="customerName" 
+              value={formData.customerName} 
+              onChange={handleInputChange} 
+              placeholder="John Doe" 
+              required 
+            />
+            <InputField 
+              label="Total Price" 
+              name="totalPrice" 
+              value={formData.totalPrice} 
+              onChange={handleInputChange} 
+              placeholder="Rp 500.000" 
+              required 
+            />
+            <InputField 
+              type="date"
+              label="Order Date" 
+              name="orderDate" 
+              value={formData.orderDate} 
+              onChange={handleInputChange} 
+              required 
+            />
+            <SelectField 
+              label="Status" 
+              name="status" 
+              value={formData.status} 
+              onChange={handleInputChange}
+              options={[
+                { label: "Pending", value: "Pending" },
+                { label: "Completed", value: "Completed" },
+                { label: "Cancelled", value: "Cancelled" }
+              ]}
+            />
+            
+            <div className="pt-4 flex justify-end gap-2">
+              <Button type="outline" onClick={(e) => {
+                e.preventDefault();
+                setIsModalOpen(false);
+              }}>
+                Cancel
+              </Button>
+              <Button type="primary" onClick={handleSubmit}>
+                Save Order
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

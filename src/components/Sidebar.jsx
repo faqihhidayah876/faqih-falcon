@@ -5,7 +5,7 @@ import {
   FaCalendarAlt,
   FaCog,
   FaQuestionCircle,
-  FaBan, FaBox, FaUsers, FaPlus, FaTags, FaFlask
+  FaBan, FaBox, FaUsers, FaPlus, FaTags, FaFlask, FaShoppingCart
 } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 
@@ -46,6 +46,11 @@ export default function Sidebar() {
             </NavLink>
           </li>
           <li>
+            <NavLink to="/customers" className={menuClass}>
+              <FaUsers className="mr-3 text-lg" /> Customers
+            </NavLink>
+          </li>
+          <li>
             <NavLink to="/appointments" className={menuClass}>
               <FaCalendarAlt className="mr-3 text-lg" /> Appointments
             </NavLink>
@@ -61,18 +66,8 @@ export default function Sidebar() {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/error-400" className={menuClass}>
-              <FaBan className="mr-4 text-xl" /> Error 400
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/error-401" className={menuClass}>
-              <FaBan className="mr-4 text-xl" /> Error 401
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/error-403" className={menuClass}>
-              <FaBan className="mr-4 text-xl" /> Error 403
+            <NavLink to="/orders" className={menuClass}>
+              <FaShoppingCart className="mr-3 text-lg" /> Orders
             </NavLink>
           </li>
         </ul>
