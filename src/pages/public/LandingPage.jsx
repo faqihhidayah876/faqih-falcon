@@ -1,3 +1,4 @@
+import FloatingChat from "../../components/FloatingChat";
 import React, { useEffect } from "react";
 import { 
   FaSpa, FaArrowRight, FaUserMd, FaLeaf, FaStar, 
@@ -462,6 +463,7 @@ export default function LandingPage() {
             <p>Crafted with Precision & Passion</p>
         </div>
       </footer>
+      <FloatingChat />
     </div>
   );
 }
