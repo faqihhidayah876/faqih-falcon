@@ -43,7 +43,7 @@ export default function FloatingChat() {
       const response = await axios.post(
         apiUrl,
         {
-          model: "llama3.1-8b",
+          model: "zai-glm-4.7",
           messages: [systemPrompt, ...messages, userMessage],
           temperature: 0.7,
         },
