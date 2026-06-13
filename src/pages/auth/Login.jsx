@@ -45,7 +45,7 @@ export default function Login() {
       if (userData.role === 'admin') {
         navigate("/dashboard"); // Masuk ke Dashboard CRM Utama
       } else {
-        navigate("/"); // Masuk ke tampilan User biasa
+        navigate("/user-dashboard"); // Masuk ke tampilan User biasa
       }
 
     } catch (err) {

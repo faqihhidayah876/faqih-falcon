@@ -5,6 +5,10 @@ import "./assets/tailwind.css";
 
 const LandingPage = React.lazy(() => import("./pages/public/LandingPage"));
 
+const PatientDashboard = React.lazy(() => import("./pages/patient/PatientDashboard"));
+const PatientReservation = React.lazy(() => import("./pages/patient/PatientReservation"));
+const PatientRewards = React.lazy(() => import("./pages/patient/PatientRewards"));
+
 const Dashboard = React.lazy(() => import("./pages/Dashboard"))
 const Header = React.lazy(() => import("./components/Header"))
 const Patients = React.lazy(() => import("./pages/Patients"))
@@ -36,6 +40,10 @@ function App() {
     <Routes>
 
       <Route path="/" element={<LandingPage />} />
+
+      <Route path="/user-dashboard" element={<PatientDashboard />} />
+      <Route path="/user-reservation" element={<PatientReservation />} />
+      <Route path="/user-rewards" element={<PatientRewards />} />
       
       <Route element={<MainLayout/>}>
       <Route path="/dashboard" element={<Dashboard />} />

@@ -1,291 +1,348 @@
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
 import { 
   FaSpa, FaArrowRight, FaUserMd, FaLeaf, FaStar, 
-  FaCalendarCheck, FaSmile, FaShieldAlt, FaClock, 
-  FaChartLine, FaCheck, FaPhoneAlt, FaMapMarkerAlt,
-  FaEnvelope, FaFacebookF, FaInstagram, FaTwitter,
-  FaQuoteLeft, FaPlay, FaCrown, FaGem, FaRocket, FaGift
+  FaCalendarCheck, FaSmile, FaShieldAlt, FaChartLine, 
+  FaPhoneAlt, FaMapMarkerAlt, FaEnvelope, FaFacebookF, 
+  FaInstagram, FaTwitter, FaQuoteLeft, FaPlay, FaCrown, 
+  FaGem, FaMagic
 } from "react-icons/fa";
 
 export default function LandingPage() {
+  // Efek Scroll Reveal
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px"
+    });
+
+    const hiddenElements = document.querySelectorAll('.reveal-on-scroll');
+    hiddenElements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Efek Spotlight Mouse pada Kartu
+  const handleMouseMove = (e) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.style.setProperty('--mouse-x', `${x}px`);
+    card.style.setProperty('--mouse-y', `${y}px`);
+  };
+
   return (
-    <div className="min-h-screen bg-[#f8faff] font-jakarta antialiased text-slate-800 overflow-x-hidden">
+    <div className="min-h-screen bg-[#fafcff] font-jakarta antialiased text-slate-800 overflow-x-hidden selection:bg-blue-200 selection:text-blue-900 relative">
       
-      {/* ===== CUSTOM STYLES ===== */}
+      {/* ===== KUMPULAN CUSTOM STYLES & KEYFRAMES ===== */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
         .font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif; }
         .font-playfair { font-family: 'Playfair Display', serif; }
 
-        .text-gradient {
-          background: linear-gradient(135deg, #2563eb, #06b6d4);
+        .text-gradient-gold {
+          background: linear-gradient(135deg, #b8860b 0%, #ffd700 50%, #b8860b 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          background-clip: text;
         }
+        .text-gradient-blue {
+          background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        /* Navigasi Glass */
         .glass-nav {
-          background: rgba(255,255,255,0.75);
-          backdrop-filter: blur(20px) saturate(180%);
-          -webkit-backdrop-filter: blur(20px) saturate(180%);
-          border-bottom: 1px solid rgba(255,255,255,0.4);
+          background: rgba(255, 255, 255, 0.6);
+          backdrop-filter: blur(24px) saturate(200%);
+          -webkit-backdrop-filter: blur(24px) saturate(200%);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.9);
+          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
         }
-        .btn-primary {
-          background: linear-gradient(135deg, #2563eb, #3b82f6);
-          box-shadow: 0 4px 20px rgba(37,99,235,0.3), inset 0 0 0 1px rgba(255,255,255,0.1);
-          transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+
+        /* Scroll Reveal Base Classes */
+        .reveal-on-scroll {
+          opacity: 0;
+          transform: translateY(40px) scale(0.98);
+          transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+          will-change: opacity, transform;
         }
-        .btn-primary:hover {
-          transform: translateY(-3px) scale(1.02);
-          box-shadow: 0 8px 30px rgba(37,99,235,0.4), inset 0 0 0 1px rgba(255,255,255,0.2);
+        .reveal-on-scroll.is-visible {
+          opacity: 1;
+          transform: translateY(0) scale(1);
         }
-        .card-luxury {
-          background: rgba(255,255,255,0.95);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(219,234,254,0.5);
-          transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+
+        /* Spotlight Mouse Card */
+        .spotlight-card {
+          position: relative;
+          background: rgba(255, 255, 255, 0.5);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.8);
+          border-radius: 2rem;
+          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+          overflow: hidden;
         }
-        .card-luxury:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 25px 50px -12px rgba(37,99,235,0.15), 0 0 0 1px rgba(59,130,246,0.1);
-          border-color: rgba(147,197,253,0.8);
-        }
-        .glow-orb {
+        .spotlight-card::before {
+          content: '';
           position: absolute;
-          border-radius: 50%;
-          filter: blur(80px);
-          opacity: 0.4;
-          pointer-events: none;
+          top: 0; left: 0; right: 0; bottom: 0;
+          border-radius: inherit;
+          background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(59, 130, 246, 0.15), transparent 40%);
+          opacity: 0;
+          transition: opacity 0.3s;
+          z-index: 0;
         }
-        .floating {
-          animation: float 6s ease-in-out infinite;
+        .spotlight-card:hover::before { opacity: 1; }
+        .spotlight-card:hover {
+          transform: translateY(-10px) scale(1.02);
+          box-shadow: 0 30px 60px -10px rgba(37, 99, 235, 0.15), 0 0 0 1px rgba(59, 130, 246, 0.2);
+          border-color: rgba(255, 255, 255, 1);
         }
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
+        .spotlight-card > * { position: relative; z-index: 1; }
+
+        /* Icon box animasi dalam card */
+        .icon-box { transition: all 0.4s ease; }
+        .spotlight-card:hover .icon-box {
+          transform: scale(1.1) rotate(5deg);
+          background: linear-gradient(135deg, #1e3a8a, #3b82f6) !important;
+          color: white !important;
+          border-color: transparent !important;
+          box-shadow: 0 10px 20px rgba(30, 58, 138, 0.3);
         }
-        .shine-effect {
+        .spotlight-card:hover .icon-box svg { color: white !important; }
+
+        /* Animasi Fluid Mesh Background */
+        .mesh-blob {
+          position: absolute;
+          filter: blur(100px);
+          z-index: -10;
+          opacity: 0.6;
+          mix-blend-mode: screen;
+          animation: move 25s infinite alternate ease-in-out;
+        }
+        @keyframes move {
+          0% { transform: translate(0px, 0px) scale(1); }
+          33% { transform: translate(50px, -100px) scale(1.2); }
+          66% { transform: translate(-50px, 50px) scale(0.8); }
+          100% { transform: translate(0px, 0px) scale(1); }
+        }
+
+        /* Hero Image Glow & Rotation */
+        .hero-image-wrapper {
+          position: relative;
+        }
+        .hero-image-wrapper::before {
+          content: '';
+          position: absolute;
+          inset: -5px;
+          border-radius: 3rem;
+          background: linear-gradient(45deg, #3b82f6, #06b6d4, #8b5cf6, #3b82f6);
+          background-size: 300% 300%;
+          animation: gradientSpin 6s ease infinite;
+          z-index: -1;
+          opacity: 0.6;
+          filter: blur(15px);
+        }
+        @keyframes gradientSpin {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        /* Shimmer Badge */
+        .shimmer-badge {
           position: relative;
           overflow: hidden;
         }
-        .shine-effect::after {
+        .shimmer-badge::after {
           content: '';
           position: absolute;
-          top: -50%; left: -50%;
-          width: 200%; height: 200%;
-          background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
-          transform: rotate(30deg);
-          transition: all 0.6s; opacity: 0;
+          top: 0; left: -100%; width: 50%; height: 100%;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent);
+          transform: skewX(-20deg);
+          animation: shimmerAnim 3s infinite;
         }
-        .shine-effect:hover::after { opacity: 1; left: 100%; }
-        .hover-bar {
-          transform: scaleX(0); transform-origin: left;
-          transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+        @keyframes shimmerAnim {
+          0% { left: -100%; }
+          20% { left: 200%; }
+          100% { left: 200%; }
         }
-        .group:hover .hover-bar { transform: scaleX(1); }
       `}</style>
 
-      {/* ===== AMBIENT BACKGROUND ===== */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="glow-orb w-[600px] h-[600px] bg-blue-300 top-[-10%] left-[-10%]" />
-        <div className="glow-orb w-[500px] h-[500px] bg-cyan-200 top-[20%] right-[-5%]" />
-        <div className="glow-orb w-[400px] h-[400px] bg-blue-200 bottom-[10%] left-[20%]" />
+      {/* ===== DYNAMIC MESH BACKGROUND ===== */}
+      <div className="fixed inset-0 w-full h-full pointer-events-none overflow-hidden">
+        <div className="mesh-blob w-[700px] h-[700px] bg-blue-200/50 rounded-full top-[-20%] left-[-10%]" />
+        <div className="mesh-blob w-[600px] h-[600px] bg-cyan-200/40 rounded-full top-[40%] right-[-15%]" style={{animationDelay: '-7s'}} />
+        <div className="mesh-blob w-[800px] h-[800px] bg-indigo-100/30 rounded-full bottom-[-30%] left-[20%]" style={{animationDelay: '-14s'}} />
+        <div className="mesh-blob w-[400px] h-[400px] bg-rose-100/20 rounded-full top-[10%] left-[40%]" style={{animationDelay: '-20s'}} />
       </div>
 
-      {/* ===== NAVBAR PREMIUM ===== */}
-      <nav className="glass-nav fixed top-0 w-full z-50 py-4">
+      {/* ===== NAVBAR ULTRA-GLASS ===== */}
+      <nav className="glass-nav fixed top-0 w-full z-50 py-4 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 flex justify-between items-center">
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:shadow-blue-500/50 transition-all duration-500 group-hover:rotate-6">
-              <FaSpa className="text-white text-lg" />
-              <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-cyan-300 rounded-full border-2 border-white animate-pulse" />
+          <a href="/" className="flex items-center gap-3 group">
+            {/* Logo Image Custom */}
+            <div className="relative w-12 h-12 rounded-2xl overflow-hidden shadow-lg group-hover:rotate-6 transition-all duration-500 bg-white/80 backdrop-blur-md border border-white/50 p-1">
+              <img 
+                src="https://i.ibb.co.com/814mnML/logo-klinik-CRM.png" 
+                alt="GlowCare Logo" 
+                className="w-full h-full object-contain group-hover:scale-110 transition-transform"
+              />
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-cyan-400 rounded-full border-2 border-white animate-pulse" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-bold tracking-tight text-slate-900">Glow<span className="text-blue-600">Care</span></span>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-semibold -mt-1">Aesthetic Clinic</span>
+              <span className="text-2xl font-bold tracking-tight text-slate-900 font-playfair">Glow<span className="text-blue-600">Care</span></span>
+              <span className="text-[9px] uppercase tracking-[0.25em] text-slate-500 font-bold -mt-1">Clinic</span>
             </div>
-          </Link>
+          </a>
 
-          <div className="hidden lg:flex items-center gap-1 bg-white/60 backdrop-blur-md rounded-full px-2 py-1.5 border border-white/40 shadow-sm">
-            {[
-              { href: "/", label: "Beranda" },
-              { href: "#services", label: "Layanan" },
-              { href: "#testimonials", label: "Testimoni" },
-              { href: "#contact", label: "Kontak" },
-            ].map((item) => (
-              <a key={item.href} href={item.href} className="px-5 py-2 rounded-full text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-white transition-all duration-300">
-                {item.label}
+          <div className="hidden lg:flex items-center gap-2 bg-white/30 backdrop-blur-md rounded-full px-2 py-1.5 border border-white/60 shadow-sm">
+            {["Beranda", "Layanan", "Testimoni", "Kontak"].map((item) => (
+              <a key={item} href={`#${item.toLowerCase()}`} className="px-6 py-2 rounded-full text-sm font-semibold text-slate-600 hover:text-blue-700 hover:bg-white hover:shadow-sm transition-all duration-300">
+                {item}
               </a>
             ))}
           </div>
 
-          <div className="flex items-center gap-3">
-            <Link to="/login" className="hidden sm:block text-sm font-medium text-slate-600 hover:text-blue-600 px-4 py-2 transition-colors">
-              Masuk
-            </Link>
-            <Link to="/register" className="btn-primary text-white text-sm font-semibold px-6 py-2.5 rounded-full flex items-center gap-2 shine-effect">
-              Buat Janji <FaArrowRight className="text-xs" />
-            </Link>
+          <div className="flex items-center gap-4">
+            <a href="/login" className="hidden sm:block text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Masuk</a>
+            <a href="/register" className="bg-slate-900 hover:bg-blue-700 text-white text-sm font-bold px-7 py-3 rounded-full flex items-center gap-2 transition-all duration-300 shadow-lg shadow-blue-900/20 hover:shadow-blue-600/30 hover:-translate-y-0.5">
+              Daftar <FaArrowRight className="text-xs" />
+            </a>
           </div>
         </div>
       </nav>
 
       {/* ===== HERO SECTION ===== */}
-      <main className="pt-32 pb-20 lg:pt-40 lg:pb-32 px-6 lg:px-12 max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+      <main className="pt-36 pb-24 lg:pt-48 lg:pb-32 px-6 lg:px-12 max-w-7xl mx-auto relative z-10">
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
           
-          {/* Kiri: Teks */}
           <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-blue-100 text-blue-700 px-5 py-2.5 rounded-full text-sm font-semibold mb-8 shadow-sm cursor-default">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500" />
-              </span>
-              Klinik Estetika Medis Terpercaya
-              <FaCrown className="text-amber-500 text-xs" />
+            <div className="reveal-on-scroll shimmer-badge inline-flex items-center gap-2 bg-white/80 backdrop-blur-md border border-white/60 text-blue-800 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider mb-8 shadow-sm">
+              Klinik Kecantikan Terbaik di Indonesia
             </div>
 
-            <h1 className="font-playfair text-5xl lg:text-7xl font-bold text-slate-900 leading-[1.1] mb-6">
-              Pancarkan 
-              <span className="block mt-2">
-                <span className="relative inline-block">
-                  <span className="text-gradient">Kecantikan Alami</span>
-                  <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 300 12" fill="none">
-                    <path d="M2 8 C75 2, 225 2, 298 8" stroke="url(#grad1)" strokeWidth="4" strokeLinecap="round" />
-                    <defs>
-                      <linearGradient id="grad1" x1="0" y1="0" x2="300" y2="0">
-                                        <stop offset="0%" stopColor="#2563eb" />
-                                        <stop offset="100%" stopColor="#06b6d4" />
-                                    </linearGradient>
-                                </defs>
-                            </svg>
-                        </span>
-                    </span>
-              Anda
+            <h1 className="reveal-on-scroll delay-100 font-playfair text-6xl lg:text-[5.5rem] font-bold text-slate-900 leading-[1.05] mb-8">
+              Sempurnakan
+              <span className="block mt-3 relative">
+                <span className="text-gradient-blue relative z-10">Kecantikan Alami</span>
+              </span>
+              Anda.
             </h1>
 
-            <p className="text-lg text-slate-500 leading-relaxed mb-10 max-w-lg">
-              Dapatkan kulit sehat, cerah, dan bersinar bersama GlowCare. Perawatan estetika profesional oleh dokter spesialis berpengalaman.
+            <p className="reveal-on-scroll delay-200 text-lg lg:text-xl text-slate-500 leading-relaxed mb-10 max-w-lg font-medium">
+              Evolusi perawatan kulit modern. Ditangani langsung oleh pakar dermatologi kelas dunia menggunakan teknologi estetika mutakhir.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <Link to="/register" className="group bg-slate-900 hover:bg-slate-800 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300 shadow-xl shadow-slate-900/20 hover:shadow-slate-900/30 hover:-translate-y-1 flex items-center justify-center gap-2">
-                Buat Janji Sekarang <FaArrowRight className="text-sm group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link to="/login" className="group bg-white border-2 border-slate-200 hover:border-blue-200 text-slate-700 hover:text-blue-600 font-semibold px-8 py-4 rounded-2xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-100/50 flex items-center justify-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
-                  <FaPlay className="text-[10px] text-blue-600" />
-                </div>
-                Lihat Layanan
-              </Link>
+            <div className="reveal-on-scroll delay-300 flex flex-col sm:flex-row gap-5 mb-12">
+              <a href="/login" className="group bg-slate-900 hover:bg-blue-700 text-white font-bold px-8 py-4 rounded-2xl transition-all duration-400 shadow-xl flex items-center justify-center gap-3 hover:-translate-y-1">
+                Mulai Reservasi <FaArrowRight className="text-sm group-hover:translate-x-1.5 transition-transform" />
+              </a>
+              <a href="#layanan" className="group bg-white/50 border border-white hover:bg-white text-slate-800 font-bold px-8 py-4 rounded-2xl transition-all duration-300 flex items-center justify-center gap-3 shadow-sm">
+                Layanan kami
+              </a>
             </div>
-
-            <div className="flex flex-wrap gap-6">
-              {[
-                { icon: FaShieldAlt, text: "Dokter Tersertifikasi", bg: "bg-blue-50", color: "text-blue-500" },
-                { icon: FaClock, text: "Buka Setiap Hari", bg: "bg-cyan-50", color: "text-cyan-500" },
-                { icon: FaChartLine, text: "Teknologi Modern", bg: "bg-blue-50", color: "text-blue-500" },
-              ].map((item, idx) => (
-                <div key={idx} className="flex items-center gap-2 text-slate-400 text-sm">
-                  <div className={`w-8 h-8 rounded-lg ${item.bg} flex items-center justify-center`}>
-                    <item.icon className={`w-4 h-4 ${item.color}`} />
-                  </div>
-                  <span>{item.text}</span>
+            
+            <div className="reveal-on-scroll delay-400 flex items-center gap-6">
+                <div className="flex -space-x-3">
+                    {[1,2,3,4].map(i => <img key={i} className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm" src={`https://i.pravatar.cc/100?img=${i+10}`} alt="user" />)}
                 </div>
-              ))}
+                <div>
+                    <div className="flex text-amber-400 text-sm mb-1"><FaStar/><FaStar/><FaStar/><FaStar/><FaStar/></div>
+                    <p className="text-slate-500 text-sm font-semibold">Dipercaya 5,000+ Pasien</p>
+                </div>
             </div>
           </div>
 
-          {/* Kanan: Ilustrasi / Gambar */}
-          <div className="relative">
-            <div className="absolute top-10 -left-10 w-20 h-20 bg-blue-200/30 rounded-full blur-xl floating" />
-            <div className="absolute bottom-20 -right-10 w-32 h-32 bg-cyan-200/20 rounded-full blur-2xl floating" style={{ animationDelay: "2s" }} />
-
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 via-cyan-300/10 to-blue-500/20 rounded-[2.5rem] blur-2xl scale-110" />
-              <div className="relative rounded-[2rem] overflow-hidden shadow-2xl shadow-blue-900/10 border border-white/60">
+          <div className="reveal-on-scroll delay-200 relative flex items-center justify-center">
+            <div className="hero-image-wrapper w-full max-w-md mx-auto rounded-[2.5rem] p-4 bg-white/40 backdrop-blur-md shadow-2xl border border-white/60">
+              <div className="w-full aspect-[4/5] rounded-[2rem] overflow-hidden relative group">
                 <img 
-                  src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&h=600&fit=crop" 
-                  alt="GlowCare Clinic"
-                  className="w-full h-auto object-cover"
+                  src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&q=80&w=800" 
+                  alt="Premium Aesthetic Care"
+                  className="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-1000"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent" />
               </div>
-
-              {/* Floating Card 1: Pasien */}
-              <div className="absolute -bottom-6 -left-6 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl shadow-blue-900/5 p-4 flex items-center gap-3 border border-blue-50/80 floating" style={{ animationDelay: "1s" }}>
-                <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                  <FaSmile className="text-white text-lg" />
-                </div>
-                <div>
-                  <div className="font-bold text-slate-900 text-sm">1000+ Pasien</div>
-                  <div className="text-xs text-slate-400">Puas & Percaya</div>
-                </div>
+            </div>
+            
+            {/* Floating Elements */}
+            <div className="absolute top-12 -left-6 bg-white/80 backdrop-blur-md border border-white rounded-2xl p-4 flex items-center gap-4 z-20 shadow-xl animate-[bounce_4s_infinite]">
+              <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center text-white shadow-lg"><FaCrown className="text-xl" /></div>
+              <div>
+                <div className="font-bold text-sm text-slate-900">Top 1.000 Klinik</div>
+                <div className="text-xs text-slate-500">Di Asia</div>
               </div>
-
-              {/* Floating Card 2: Rating */}
-              <div className="absolute -top-4 -right-4 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl shadow-blue-900/5 p-4 border border-blue-50/80 floating" style={{ animationDelay: "0.5s" }}>
-                <div className="flex items-center gap-1 mb-1.5">
-                  {[...Array(5)].map((_, i) => <FaStar key={i} className="w-4 h-4 text-amber-400" />)}
-                </div>
-                <div className="font-bold text-slate-900 text-sm">4.9/5 Rating</div>
-                <div className="text-xs text-slate-400">Dari ulasan pasien</div>
+            </div>
+            
+            <div className="absolute bottom-16 -right-6 bg-white/80 backdrop-blur-md border border-white rounded-2xl p-4 flex items-center gap-3 z-20 shadow-xl animate-[bounce_5s_infinite_reverse]">
+              <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-600"><FaChartLine className="text-lg"/></div>
+              <div>
+                <div className="font-bold text-sm text-slate-900">99% Sukses</div>
+                <div className="text-xs text-slate-500">Tingkat Kepuasan</div>
               </div>
             </div>
           </div>
         </div>
 
         {/* ===== STATISTIK ===== */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-24">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-32 relative z-10">
           {[
-            { value: "10+", label: "Dokter Spesialis", icon: FaUserMd, gradient: "from-blue-500 to-blue-600", shadow: "shadow-blue-500/20", bar: "from-blue-500 to-blue-600" },
-            { value: "20+", label: "Perawatan Modern", icon: FaLeaf, gradient: "from-emerald-500 to-teal-500", shadow: "shadow-emerald-500/20", bar: "from-emerald-500 to-teal-500" },
-            { value: "98%", label: "Kepuasan Pasien", icon: FaStar, gradient: "from-amber-400 to-orange-500", shadow: "shadow-amber-500/20", bar: "from-amber-400 to-orange-500" },
-            { value: "24/7", label: "Layanan Konsultasi", icon: FaClock, gradient: "from-cyan-500 to-blue-500", shadow: "shadow-cyan-500/20", bar: "from-cyan-500 to-blue-500" },
+            { value: "15+", label: "Pakar Estetika", icon: FaUserMd },
+            { value: "50+", label: "Teknologi Laser", icon: FaChartLine },
+            { value: "99%", label: "Pasien Puas", icon: FaSmile },
+            { value: "24/7", label: "Layanan VVIP", icon: FaGem },
           ].map((stat, idx) => (
-            <div key={idx} className="card-luxury rounded-3xl p-8 text-center group relative overflow-hidden" style={{ transitionDelay: `${idx * 100}ms` }}>
-              <div className={`hover-bar absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${stat.bar}`} />
-              <div className={`w-16 h-16 bg-gradient-to-br ${stat.gradient} rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg ${stat.shadow} group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
-                <stat.icon className="text-white text-2xl" />
+            <div key={idx} className={`reveal-on-scroll spotlight-card p-8 text-center delay-${(idx+1)*100}`} onMouseMove={handleMouseMove}>
+              <div className="icon-box w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-white border border-slate-100 shadow-sm text-blue-600">
+                <stat.icon className="text-2xl" />
               </div>
-              <div className="font-playfair text-4xl lg:text-5xl font-black text-slate-900 mb-2">{stat.value}</div>
-              <div className="text-sm text-slate-400 font-medium">{stat.label}</div>
+              <div className="font-playfair text-4xl lg:text-5xl font-black text-slate-900 mb-2 tracking-tight">{stat.value}</div>
+              <div className="text-sm text-slate-500 font-bold uppercase tracking-wider">{stat.label}</div>
             </div>
           ))}
         </div>
 
-        {/* ===== LAYANAN UNGGULAN ===== */}
-        <section id="services" className="mt-32 relative">
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-50/30 rounded-full blur-3xl -z-10" />
-          
-          <div className="text-center mb-20 max-w-2xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-5 py-2 rounded-full text-sm font-semibold mb-6 border border-blue-100">
-              <FaGem className="text-xs" />
-              Layanan Terbaik
-            </div>
-            <h2 className="font-playfair text-4xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight">
-              Layanan Unggulan <span className="text-gradient">Kami</span>
+        {/* ===== LAYANAN VVIP ===== */}
+        <section id="layanan" className="mt-40 relative z-10 pt-10">
+          <div className="text-center mb-20 max-w-3xl mx-auto reveal-on-scroll">
+            <span className="text-blue-600 font-bold text-sm uppercase tracking-widest mb-4 block">Layanan Premium</span>
+            <h2 className="font-playfair text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+              Eksklusif Untuk <span className="text-gradient-blue">Kebutuhan Anda</span>
             </h2>
-            <p className="text-slate-400 text-lg leading-relaxed">Perawatan terbaik dengan teknologi terkini untuk kecantikan Anda</p>
+            <p className="text-slate-500 text-lg font-medium">
+              Rasakan pengalaman perawatan bertaraf internasional dengan privasi maksimal dan hasil yang memukau.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { icon: FaUserMd, title: "Konsultasi Kulit", desc: "Analisis kulit mendalam oleh dokter ahli untuk menentukan perawatan yang tepat.", bg: "bg-blue-50", hoverBg: "group-hover:bg-blue-100", color: "text-blue-600", bar: "from-blue-500 to-blue-600", linkColor: "text-blue-600" },
-              { icon: FaLeaf, title: "Facial Treatment", desc: "Perawatan wajah dengan bahan alami dan teknologi modern untuk kulit cerah.", bg: "bg-emerald-50", hoverBg: "group-hover:bg-emerald-100", color: "text-emerald-600", bar: "from-emerald-500 to-teal-500", linkColor: "text-emerald-600" },
-              { icon: FaStar, title: "Anti Aging", desc: "Perawatan khusus untuk mengurangi tanda penuaan dan menjaga elastisitas kulit.", bg: "bg-amber-50", hoverBg: "group-hover:bg-amber-100", color: "text-amber-600", bar: "from-amber-400 to-orange-500", linkColor: "text-amber-600" },
-              { icon: FaCalendarCheck, title: "Laser Therapy", desc: "Terapi laser untuk berbagai masalah kulit seperti bekas jerawat dan flek hitam.", bg: "bg-violet-50", hoverBg: "group-hover:bg-violet-100", color: "text-violet-600", bar: "from-violet-500 to-purple-600", linkColor: "text-violet-600" },
-              { icon: FaShieldAlt, title: "Body Treatment", desc: "Perawatan tubuh seperti body contouring, slimming, dan detox untuk silhouette ideal.", bg: "bg-cyan-50", hoverBg: "group-hover:bg-cyan-100", color: "text-cyan-600", bar: "from-cyan-500 to-blue-500", linkColor: "text-cyan-600" },
-              { icon: FaSmile, title: "Perawatan Pria", desc: "Layanan khusus untuk kesehatan dan estetika kulit pria oleh dokter profesional.", bg: "bg-slate-50", hoverBg: "group-hover:bg-slate-100", color: "text-slate-600", bar: "from-slate-500 to-slate-700", linkColor: "text-slate-600" },
+              { icon: FaLeaf, title: "Rejuvenasi Organik", desc: "Mengembalikan keremajaan kulit dengan ekstrak sel punca dan bahan premium.", color: "text-emerald-500" },
+              { icon: FaStar, title: "Anti-Aging Ultherapy", desc: "Lifting tanpa operasi menggunakan gelombang ultrasound untuk wajah kencang.", color: "text-amber-500" },
+              { icon: FaCalendarCheck, title: "Pico Laser Pro", desc: "Hapus flek, melasma, dan tato dalam hitungan pikodetik tanpa pemulihan lama.", color: "text-red-400" },
+              { icon: FaShieldAlt, title: "Cryolipolysis", desc: "Membekukan sel lemak membandel untuk membentuk siluet tubuh yang sempurna.", color: "text-cyan-500" },
+              { icon: FaSpa, title: "Royal Facial", desc: "Facial eksklusif dengan serpihan emas 24k murni untuk kilau kulit instan.", color: "text-violet-500" },
+              { icon: FaUserMd, title: "VIP Consultation", desc: "Sesi privat bersama dokter untuk merancang Blueprint Kecantikan Anda.", color: "text-blue-500" },
             ].map((service, idx) => (
-              <div key={idx} className="card-luxury rounded-3xl p-8 group relative overflow-hidden" style={{ transitionDelay: `${(idx % 3) * 100}ms` }}>
-                <div className={`hover-bar absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${service.bar}`} />
-                <div className={`w-16 h-16 ${service.bg} ${service.hoverBg} rounded-2xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3`}>
-                  <service.icon className={`w-8 h-8 ${service.color}`} />
+              <div key={idx} className="reveal-on-scroll spotlight-card group p-8" style={{transitionDelay: `${(idx % 3) * 100}ms`}} onMouseMove={handleMouseMove}>
+                <div className="icon-box w-16 h-16 bg-white border border-slate-100 rounded-2xl flex items-center justify-center mb-6 shadow-sm">
+                  <service.icon className={`w-7 h-7 ${service.color}`} />
                 </div>
-                <h3 className="font-playfair font-bold text-xl text-slate-900 mb-3">{service.title}</h3>
-                <p className="text-slate-400 leading-relaxed mb-4">{service.desc}</p>
-                <div className={`flex items-center gap-1 text-sm font-medium ${service.linkColor} opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0`}>
-                  Selengkapnya <FaArrowRight className="text-xs" />
+                <h3 className="font-playfair font-bold text-2xl text-slate-900 mb-4">{service.title}</h3>
+                <p className="text-slate-500 font-medium mb-8 leading-relaxed">{service.desc}</p>
+                <div className="flex items-center gap-2 text-sm font-bold text-slate-400 group-hover:text-blue-600 transition-colors">
+                  Selengkapnya <FaArrowRight className="text-xs transform group-hover:translate-x-1 transition-transform duration-300"/>
                 </div>
               </div>
             ))}
@@ -293,38 +350,31 @@ export default function LandingPage() {
         </section>
 
         {/* ===== TESTIMONIAL ===== */}
-        <section id="testimonials" className="mt-32 relative">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-50/20 rounded-full blur-3xl -z-10" />
-          
-          <div className="text-center mb-20 max-w-2xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-5 py-2 rounded-full text-sm font-semibold mb-6 border border-blue-100">
-              <FaStar className="text-xs" />
-              Testimoni
-            </div>
-            <h2 className="font-playfair text-4xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight">
-              Apa Kata <span className="text-gradient">Pasien Kami?</span>
+        <section id="testimoni" className="mt-40 relative z-10 pt-10">
+          <div className="reveal-on-scroll text-center mb-16">
+            <span className="text-blue-600 font-bold text-sm uppercase tracking-widest mb-4 block">Testimoni</span>
+            <h2 className="font-playfair text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+              Cerita dari <span className="text-gradient-blue">Klien Kami</span>
             </h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { name: "Siti Nurhaliza", text: "Kulit saya jadi lebih cerah dan kenyal setelah facial di GlowCare. Dokternya ramah dan menjelaskan dengan detail.", avatar: "SN", grad: "from-blue-500 to-cyan-400", shadow: "shadow-blue-500/20" },
-              { name: "Dewi Andriani", text: "Terapi laser untuk bekas jerawat memberikan hasil yang luar biasa. Sangat puas!", avatar: "DA", grad: "from-pink-500 to-rose-500", shadow: "shadow-pink-500/20" },
-              { name: "Rina Fitriani", text: "Pelayanan profesional, tempat bersih, dan hasil memuaskan. Highly recommended!", avatar: "RF", grad: "from-violet-500 to-purple-600", shadow: "shadow-violet-500/20" },
+              { name: "Alinea Putri", job: "Aktris & Model", text: "GlowCare bukan sekadar klinik, tapi tempat pelarian saya. Hasil Pico Laser mereka luar biasa.", img: 20 },
+              { name: "Dinda Kirana", job: "Entrepreneur", text: "Pelayanan mewah dan private. Ultherapy di sini adalah investasi terbaik untuk kulit saya!", img: 25 },
+              { name: "Michelle Tan", job: "Beauty Vlogger", text: "Peralatan tercanggih yang pernah saya lihat. Sentuhan dokter-dokternya sangat profesional.", img: 32 },
             ].map((testi, idx) => (
-              <div key={idx} className="card-luxury rounded-3xl p-8 relative overflow-hidden group" style={{ transitionDelay: `${idx * 100}ms` }}>
-                <FaQuoteLeft className="absolute top-6 right-6 text-blue-50 text-4xl group-hover:text-blue-100 transition-colors" />
+              <div key={idx} className="reveal-on-scroll spotlight-card p-10" style={{transitionDelay: `${idx * 150}ms`}} onMouseMove={handleMouseMove}>
+                <FaQuoteLeft className="text-blue-100 text-5xl mb-6" />
                 <div className="flex gap-1 mb-6">
-                  {[...Array(5)].map((_, i) => <FaStar key={i} className="w-5 h-5 text-amber-400" />)}
+                  {[...Array(5)].map((_, i) => <FaStar key={i} className="w-4 h-4 text-amber-400" />)}
                 </div>
-                <p className="text-slate-600 leading-relaxed mb-8 text-[15px] relative z-10 italic">"{testi.text}"</p>
-                <div className="flex items-center gap-4 pt-6 border-t border-slate-50">
-                  <div className={`w-12 h-12 bg-gradient-to-br ${testi.grad} rounded-full flex items-center justify-center text-white font-bold shadow-md ${testi.shadow}`}>
-                    {testi.avatar}
-                  </div>
+                <p className="text-slate-600 italic mb-10 font-medium leading-relaxed text-[15px]">"{testi.text}"</p>
+                <div className="flex items-center gap-4 border-t border-slate-100 pt-6">
+                  <img src={`https://i.pravatar.cc/150?img=${testi.img}`} alt={testi.name} className="w-14 h-14 rounded-full border-2 border-white shadow-md object-cover" />
                   <div>
                     <div className="font-bold text-slate-900">{testi.name}</div>
-                    <div className="text-sm text-slate-400">Pasien GlowCare</div>
+                    <div className="text-sm text-blue-600 font-semibold">{testi.job}</div>
                   </div>
                 </div>
               </div>
@@ -332,44 +382,31 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ===== CTA ===== */}
-        <section id="contact" className="mt-32">
-          <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-[2.5rem] p-12 lg:p-20 overflow-hidden text-center">
-            <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-3xl" />
-            <div className="absolute top-20 right-20 w-3 h-3 bg-blue-400 rounded-full opacity-30 animate-pulse" />
-            <div className="absolute bottom-16 left-16 w-2 h-2 bg-cyan-300 rounded-full opacity-40 animate-pulse" style={{ animationDelay: "1s" }} />
-            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "40px 40px" }} />
-
-            <div className="relative z-10 max-w-2xl mx-auto">
-              <div className="inline-flex items-center gap-2 bg-white/10 text-blue-300 px-5 py-2 rounded-full text-sm font-semibold mb-8 border border-white/10 backdrop-blur-sm">
-                <FaRocket className="text-xs" />
-                Konsultasi Gratis
-              </div>
-
-              <h2 className="font-playfair text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-                Siap Tampil Lebih <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">Percaya Diri?</span>
+        {/* ===== CTA DARK LUXURY ===== */}
+        <section id="kontak" className="mt-40 relative z-10 pt-10">
+          <div className="reveal-on-scroll relative bg-slate-900 rounded-[3rem] p-12 lg:p-24 text-center shadow-2xl overflow-hidden border border-slate-800">
+            {/* Animated mesh background inside CTA */}
+            <div className="absolute inset-0 opacity-30 z-0">
+              <div className="absolute top-0 left-0 w-96 h-96 bg-blue-600 rounded-full filter blur-[100px] mix-blend-screen animate-[move_15s_infinite_alternate]"></div>
+              <div className="absolute bottom-0 right-0 w-96 h-96 bg-cyan-500 rounded-full filter blur-[100px] mix-blend-screen animate-[move_20s_infinite_alternate_reverse]"></div>
+            </div>
+            
+            <div className="relative z-10 max-w-3xl mx-auto">
+              <FaGem className="text-5xl text-cyan-400 mx-auto mb-8 animate-pulse" />
+              <h2 className="font-playfair text-4xl lg:text-6xl font-bold text-white mb-8 leading-tight">
+                Mulai Transformasi <br/><span className="text-gradient-gold italic">Eksklusif Anda</span>
               </h2>
-              <p className="text-blue-200/70 text-lg mb-10 leading-relaxed">
-                Konsultasikan masalah kulit Anda secara gratis dengan tim dokter kami dan dapatkan rencana perawatan yang tepat.
+              <p className="text-slate-300 text-lg mb-12 font-medium max-w-xl mx-auto">
+                Jadwalkan konsultasi Anda bersama kami dan rasakan perawatan terbaik kami.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
-                <Link to="/register" className="group inline-flex items-center justify-center bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-400 hover:to-cyan-300 text-white font-bold px-10 py-4 rounded-2xl shadow-xl shadow-blue-500/25 transition-all duration-300 hover:-translate-y-1 text-base gap-2 shine-effect">
-                  Daftar Sekarang <FaArrowRight className="text-sm group-hover:translate-x-1 transition-transform" />
-                </Link>
-                <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center bg-white/10 hover:bg-white/15 border border-white/20 text-white font-semibold px-10 py-4 rounded-2xl transition-all duration-300 text-base backdrop-blur-sm gap-2">
-                  Chat via WhatsApp
+              <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                <a href="/register" className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold px-10 py-5 rounded-full text-lg shadow-xl shadow-blue-900/50 hover:scale-105 transition-all flex items-center justify-center gap-3">
+                  Reservasi<FaArrowRight />
                 </a>
-              </div>
-
-              <div className="flex flex-wrap gap-6 justify-center text-sm text-blue-300/60">
-                {["Konsultasi gratis", "Tanpa komitmen", "Dokter ahli siap melayani"].map((text, idx) => (
-                  <div key={idx} className="flex items-center gap-2">
-                    <FaCheck className="text-cyan-400 text-xs" />
-                    <span>{text}</span>
-                  </div>
-                ))}
+                <a href="/" className="bg-white/5 border border-white/20 hover:bg-white/10 text-white font-bold px-10 py-5 rounded-full text-lg backdrop-blur-md hover:scale-105 transition-all flex items-center justify-center gap-3">
+                  <FaPhoneAlt /> Hubungi Concierge
+                </a>
               </div>
             </div>
           </div>
@@ -377,55 +414,52 @@ export default function LandingPage() {
       </main>
 
       {/* ===== FOOTER ===== */}
-      <footer className="bg-slate-900 text-white mt-20 relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
-        
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-16 pb-8">
-          <div className="grid md:grid-cols-4 gap-10 mb-12">
+      <footer className="bg-slate-950 text-slate-400 mt-32 border-t border-white/5 py-16 relative z-10">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid md:grid-cols-4 gap-12">
+            <div className="md:col-span-1">
+                <a href="/" className="flex items-center gap-3 mb-6">
+                    {/* Logo Image Custom Footer */}
+                    <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg bg-white/10 backdrop-blur-md border border-white/20 p-0.5">
+                       <img src="https://i.ibb.co.com/814mnML/logo-klinik-CRM.png" alt="GlowCare Logo" className="w-full h-full object-contain" />
+                    </div>
+                    <span className="text-xl font-bold tracking-tight font-playfair text-white">Glow<span className="text-blue-500">Care</span></span>
+                </a>
+                <p className="text-sm leading-relaxed">Mendefinisikan ulang standar kecantikan dan estetika medis melalui keahlian tanpa kompromi.</p>
+            </div>
             <div>
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                  <FaSpa className="text-white text-sm" />
+                <h4 className="font-bold text-white mb-6 uppercase tracking-widest text-xs">Navigasi</h4>
+                <ul className="space-y-3 text-sm">
+                    <li><a href="#" className="hover:text-white transition-colors">Beranda</a></li>
+                    <li><a href="#" className="hover:text-white transition-colors">Layanan</a></li>
+                    <li><a href="#" className="hover:text-white transition-colors">Testimoni</a></li>
+                    <li><a href="#" className="hover:text-white transition-colors">Kontak</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 className="font-bold text-white mb-6 uppercase tracking-widest text-xs">Layanan</h4>
+                <ul className="space-y-3 text-sm">
+                    <li><a href="#" className="hover:text-white transition-colors">Rejuvenasi Organik</a></li>
+                    <li><a href="#" className="hover:text-white transition-colors">Anti-Aging Ultherapy</a></li>
+                    <li><a href="#" className="hover:text-white transition-colors">Pico Laser Pro</a></li>
+                    <li><a href="#" className="hover:text-white transition-colors">Royal Facial</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 className="font-bold text-white mb-6 uppercase tracking-widest text-xs">Kontak</h4>
+                <ul className="space-y-3 text-sm">
+                    <li className="flex items-center gap-2"><FaMapMarkerAlt className="text-blue-500"/> Pekanbaru, ID</li>
+                    <li className="flex items-center gap-2"><FaPhoneAlt className="text-blue-500"/> +62 800 1234 5678</li>
+                    <li className="flex items-center gap-2"><FaEnvelope className="text-blue-500"/> faqih24si@mahasiswa.pcr.ac.id</li>
+                </ul>
+                <div className="flex gap-4 mt-6">
+                    <a href="#" className="w-9 h-9 rounded-full border border-slate-800 bg-slate-900 flex items-center justify-center hover:bg-blue-600 hover:border-blue-600 transition-all"><FaInstagram size={14}/></a>
+                    <a href="#" className="w-9 h-9 rounded-full border border-slate-800 bg-slate-900 flex items-center justify-center hover:bg-blue-600 hover:border-blue-600 transition-all"><FaFacebookF size={14}/></a>
                 </div>
-                <div>
-                  <span className="font-bold text-lg text-white">Glow</span>
-                  <span className="font-bold text-lg text-blue-400">Care</span>
-                </div>
-              </div>
-              <p className="text-slate-400 text-sm leading-relaxed">Klinik kecantikan dan estetika medis terpercaya di Indonesia.</p>
             </div>
-
-            <div>
-              <h4 className="font-semibold text-sm text-slate-300 uppercase tracking-wider mb-4">Layanan</h4>
-              <div className="space-y-3">
-                {["Konsultasi Kulit", "Facial Treatment", "Anti Aging", "Laser Therapy"].map((item) => (
-                  <a key={item} href="#services" className="block text-slate-500 hover:text-blue-400 text-sm transition-colors">{item}</a>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h4 className="font-semibold text-sm text-slate-300 uppercase tracking-wider mb-4">Kontak</h4>
-              <div className="space-y-3 text-slate-500 text-sm">
-                <div className="flex items-center gap-2"><FaMapMarkerAlt className="text-blue-400" /> Jl. Umban Sari No. 1, Pekanbaru</div>
-                <div className="flex items-center gap-2"><FaPhoneAlt className="text-blue-400" /> (021) 1234-5678</div>
-                <div className="flex items-center gap-2"><FaEnvelope className="text-blue-400" /> hello@glowcare.id</div>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="font-semibold text-sm text-slate-300 uppercase tracking-wider mb-4">Ikuti Kami</h4>
-              <div className="flex gap-4">
-                <a href="#" className="w-10 h-10 bg-slate-800 hover:bg-blue-600 rounded-full flex items-center justify-center transition-all duration-300"><FaInstagram /></a>
-                <a href="#" className="w-10 h-10 bg-slate-800 hover:bg-blue-600 rounded-full flex items-center justify-center transition-all duration-300"><FaFacebookF /></a>
-                <a href="#" className="w-10 h-10 bg-slate-800 hover:bg-blue-600 rounded-full flex items-center justify-center transition-all duration-300"><FaTwitter /></a>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-white/5 pt-8 text-center text-slate-500 text-sm">
-            &copy; {new Date().getFullYear()} GlowCare Beauty Clinic. All rights reserved.
-          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 mt-12 pt-8 border-t border-slate-800/50 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+            <p>&copy; {new Date().getFullYear()} GlowCare Clinic. All rights reserved.</p>
+            <p>Crafted with Precision & Passion</p>
         </div>
       </footer>
     </div>

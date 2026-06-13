@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { 
   FaUserInjured, 
   FaCalendarCheck, 
@@ -7,7 +9,7 @@ import {
   FaCheckCircle 
 } from "react-icons/fa";
 
-// 1. Import komponen-komponen yang sudah kita pisah ke folder components
+// Import komponen-komponen
 import PageHeader from "../components/PageHeader";
 import Button from "../components/Button";
 import KpiCard from "../components/KpiCard";
@@ -15,6 +17,34 @@ import Card from "../components/Card";
 import Table from "../components/Table";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+
+  // ===== TAMBAHAN: PROTEKSI HALAMAN ADMIN =====
+  useEffect(() => {
+    const sessionData = localStorage.getItem("user_session");
+    
+    if (!sessionData) {
+      // Jika tidak ada sesi sama sekali, lempar ke halaman login
+      navigate("/login");
+    } else {
+      const parsedUser = JSON.parse(sessionData);
+      
+      // Pengecekan Role: Pastikan hanya Admin yang bisa mengakses halaman ini
+      // Ganti 'admin' sesuai dengan nilai role di database Anda (misal: 'Admin', 'superadmin', dll)
+      if (parsedUser.role !== 'admin') {
+        // Jika pasien mencoba akses /dashboard, lempar dia ke dashboard pasien
+        navigate("/user-dashboard"); 
+      } else {
+        setUser(parsedUser);
+      }
+    }
+  }, [navigate]);
+
+  // Mencegah kedipan layar (flash) sebelum pengecekan selesai
+  if (!user) return null; 
+  // ================================================
+
   // Array untuk Header Tabel Popular Services
   const popularServicesHeaders = ["ID", "Service Name", "Patients", "Revenue"];
 
@@ -38,7 +68,6 @@ export default function Dashboard() {
 
       {/* --- ROW 2: CHARTS AREA --- */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-         {/* 4. Menggunakan <Card> untuk membungkus Line Chart */}
          <Card className="lg:col-span-2 p-6 flex flex-col">
              <div className="flex justify-between items-start mb-2">
                  <h3 className="font-bold text-gray-800">Total Profit</h3>
@@ -72,13 +101,11 @@ export default function Dashboard() {
              </div>
          </Card>
 
-         {/* 5. Menggunakan <Card> untuk membungkus Bar Chart */}
          <Card className="p-6 flex flex-col">
              <div className="flex justify-between items-center mb-6">
                 <h3 className="font-bold text-gray-800">Most Day Active</h3>
                 <span className="text-gray-400 cursor-pointer">•••</span>
              </div>
-             {/* Bar Chart */}
              <div className="flex-1 flex items-end justify-between gap-3 pt-4">
                 <Bar day="Sun" height="h-16" isToday={false} />
                 <Bar day="Mon" height="h-20" isToday={false} />
@@ -100,7 +127,6 @@ export default function Dashboard() {
                 <h3 className="font-bold text-gray-800">Popular Services</h3>
                 <span className="text-gray-400 cursor-pointer">•••</span>
             </div>
-            {/* 6. Menggunakan komponen <Table> kustom untuk menggantikan tag <table> HTML bawaan */}
             <Table headers={popularServicesHeaders}>
                 <tr className="hover:bg-gray-50 transition-colors">
                     <td className="py-4 text-gray-500 px-6">#83009</td>
@@ -139,7 +165,6 @@ export default function Dashboard() {
             <h3 className="font-bold text-gray-800 text-lg mb-2">Ready for Today!</h3>
             <p className="text-sm text-gray-500 mb-6">You have 45 appointments scheduled for today. Make sure to check the calendar.</p>
             
-            {/* 7. Menggunakan komponen <Button> type outline */}
             <Button type="outline" className="w-full">
                 View Schedule
             </Button>
@@ -150,7 +175,6 @@ export default function Dashboard() {
 }
 
 // --- SUB COMPONENTS LOKAL ---
-// Bar chart sengaja dibiarkan lokal di sini karena ini adalah komponen yang spesifik HANYA dipakai di grafik Most Day Active ini saja.
 function Bar({ day, height, isToday, value }) {
     return (
         <div className="flex flex-col items-center gap-2 w-full group cursor-pointer">

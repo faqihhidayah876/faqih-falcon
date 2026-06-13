@@ -1,223 +1,114 @@
-import { FaCalendarAlt, FaPlus, FaTimes, FaEllipsisH } from "react-icons/fa";
+import { useState } from "react";
 import PageHeader from "../components/PageHeader";
-import appointmentsData from "../data/AppointmentsData.json";
-import { useState, useEffect } from "react";
+import Card from "../components/Card";
+import { FaCheck, FaTimes, FaCalendarAlt, FaClock, FaUserCircle, FaSpa } from "react-icons/fa";
+
+// Menggunakan komponen tabel Shadcn UI yang kamu miliki
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export default function Appointments() {
-  const [appointments, setAppointments] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    appointmentId: "",
-    patientName: "",
-    service: "Facial",
-    date: "",
-    status: "Scheduled",
-  });
+  // Dummy Data Reservasi Masuk dari Pasien
+  const [reservations, setReservations] = useState([
+    { id: 1, patient: "Alinea Putri", service: "Pico Laser Pro", doctor: "Dr. Sarah Monica, Sp.KK", date: "2026-10-24", time: "14:00", status: "pending" },
+    { id: 2, patient: "Budi Pelanggan", service: "Anti-Aging Ultherapy", doctor: "Dr. Budi Santoso, Dipl. AAAM", date: "2026-10-25", time: "10:00", status: "approved" },
+    { id: 3, patient: "Dinda Kirana", service: "Royal Gold Facial", doctor: "Dr. Sarah Monica, Sp.KK", date: "2026-10-26", time: "11:30", status: "pending" },
+  ]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setAppointments(appointmentsData);
-      setIsLoading(false);
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  // Fungsi interaktif untuk menerima reservasi
+  const handleApprove = (id) => {
+    setReservations(reservations.map(res => 
+      res.id === id ? { ...res, status: "approved" } : res
+    ));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setAppointments([formData, ...appointments]);
-    setIsModalOpen(false);
-    setFormData({
-      appointmentId: "",
-      patientName: "",
-      service: "Facial",
-      date: "",
-      status: "Scheduled",
-    });
+  // Fungsi interaktif untuk menolak reservasi
+  const handleReject = (id) => {
+    setReservations(reservations.map(res => 
+      res.id === id ? { ...res, status: "rejected" } : res
+    ));
   };
 
   return (
-    <div className="flex flex-col font-inter">
-      <PageHeader
-        title="Appointments"
-        breadcrumb={["Dashboard", "Appointments List"]}
-      >
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl flex items-center space-x-2 text-sm font-medium shadow-sm shadow-blue-600/20 transition-all"
-        >
-          <FaPlus /> <span>Add Appointment</span>
-        </button>
-      </PageHeader>
+    <div className="flex flex-col font-jakarta">
+      <PageHeader title="Appointment Management" breadcrumb={["Dashboard", "Reservasi Pasien"]} />
 
-      {isLoading ? (
-        <div className="mt-8 flex justify-center items-center text-blue-600 font-semibold animate-pulse">
-          ⏳ Sedang memuat data reservasi...
+      <Card className="mt-6 p-4">
+        <div className="mb-6">
+          <h3 className="text-xl font-bold text-slate-800 font-playfair">Daftar Permintaan Janji Temu</h3>
+          <p className="text-sm text-slate-500 font-medium">Kelola, setujui, atau jadwalkan ulang permintaan perawatan dari pasien.</p>
         </div>
-      ) : (
-        <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100 mt-4">
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
-              <thead className="bg-gray-50/50 border-b border-gray-100 text-gray-500 uppercase text-xs tracking-wider">
-                <tr>
-                  <th className="px-6 py-4 font-semibold">Appointment ID</th>
-                  <th className="px-6 py-4 font-semibold">Patient Name</th>
-                  <th className="px-6 py-4 font-semibold">Service</th>
-                  <th className="px-6 py-4 font-semibold">Date & Time</th>
-                  <th className="px-6 py-4 font-semibold">Status</th>
-                  <th className="px-6 py-4 font-semibold text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {appointments.map((apt, idx) => (
-                  <tr key={idx} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 font-medium text-gray-500">
-                      {apt.appointmentId}
-                    </td>
-                    <td className="px-6 py-4 font-semibold text-gray-800">
-                      {apt.patientName}
-                    </td>
-                    <td className="px-6 py-4 text-gray-600">{apt.service}</td>
-                    <td className="px-6 py-4 text-gray-500 flex items-center gap-2">
-                      <FaCalendarAlt className="text-gray-400" /> {apt.date}
-                    </td>
-                    <td className="px-6 py-4">
-                      <span
-                        className={`px-2.5 py-1 rounded-md text-xs font-bold border ${
-                          apt.status === "Completed"
-                            ? "bg-green-50 text-green-600 border-green-200"
-                            : apt.status === "Scheduled"
-                            ? "bg-blue-50 text-blue-600 border-blue-200"
-                            : "bg-amber-50 text-amber-600 border-amber-200"
-                        }`}
+
+        <Table>
+          <TableHeader className="bg-slate-50">
+            <TableRow>
+              <TableHead className="font-bold text-slate-700">Pasien</TableHead>
+              <TableHead className="font-bold text-slate-700">Layanan Perawatan</TableHead>
+              <TableHead className="font-bold text-slate-700">Dokter</TableHead>
+              <TableHead className="font-bold text-slate-700">Waktu Kunjungan</TableHead>
+              <TableHead className="font-bold text-slate-700">Status</TableHead>
+              <TableHead className="font-bold text-slate-700 text-center">Aksi</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {reservations.map((res) => (
+              <TableRow key={res.id} className="hover:bg-slate-50/80 transition-colors">
+                <TableCell className="font-bold text-slate-800 flex items-center gap-2 py-4">
+                  <FaUserCircle className="text-slate-400 text-lg" />
+                  {res.patient}
+                </TableCell>
+                <TableCell className="text-slate-600 font-semibold">
+                  <span className="flex items-center gap-1.5"><FaSpa className="text-blue-500 text-xs"/> {res.service}</span>
+                </TableCell>
+                <TableCell className="text-slate-500 font-medium">{res.doctor}</TableCell>
+                <TableCell className="text-slate-600 font-medium">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="flex items-center gap-1 text-xs text-slate-700 font-bold"><FaCalendarAlt className="text-blue-500"/> {res.date}</span>
+                    <span className="flex items-center gap-1 text-[11px] text-slate-400 font-semibold"><FaClock/> {res.time} WIB</span>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <span className={`text-xs font-bold px-3 py-1 rounded-full border ${
+                    res.status === "approved" ? "bg-green-50 text-green-700 border-green-200" :
+                    res.status === "rejected" ? "bg-red-50 text-red-700 border-red-200" :
+                    "bg-amber-50 text-amber-700 border-amber-200 animate-pulse"
+                  }`}>
+                    {res.status === "approved" ? "Disetujui" : res.status === "rejected" ? "Ditolak" : "Pending"}
+                  </span>
+                </TableCell>
+                <TableCell className="text-center">
+                  {res.status === "pending" ? (
+                    <div className="flex justify-center gap-2">
+                      <button 
+                        onClick={() => handleApprove(res.id)}
+                        className="p-2.5 bg-green-50 text-green-600 border border-green-100 rounded-xl hover:bg-green-600 hover:text-white transition-all shadow-sm"
+                        title="Setujui Janji Temu"
                       >
-                        {apt.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      <button className="text-gray-400 hover:text-blue-600 p-2 rounded-lg hover:bg-blue-50 transition-colors">
-                        <FaEllipsisH />
+                        <FaCheck className="text-xs" />
                       </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-md p-6 relative shadow-2xl">
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="absolute top-6 right-6 text-gray-400 hover:text-red-500 transition-colors"
-            >
-              <FaTimes size={20} />
-            </button>
-            <h2 className="text-xl font-bold text-gray-800 mb-6">
-              Add New Appointment
-            </h2>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Appointment ID
-                </label>
-                <input
-                  type="text"
-                  name="appointmentId"
-                  value={formData.appointmentId}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 transition-all"
-                  placeholder="APT-9999"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Patient Name
-                </label>
-                <input
-                  type="text"
-                  name="patientName"
-                  value={formData.patientName}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 transition-all"
-                  placeholder="Jane Doe"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Service
-                </label>
-                <select
-                  name="service"
-                  value={formData.service}
-                  onChange={handleInputChange}
-                  className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 transition-all"
-                >
-                  <option value="Facial">Facial</option>
-                  <option value="Laser">Laser</option>
-                  <option value="Massage">Massage</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Date & Time
-                </label>
-                <input
-                  type="datetime-local"
-                  name="date"
-                  value={formData.date}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 transition-all text-gray-600"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Status
-                </label>
-                <select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleInputChange}
-                  className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 transition-all"
-                >
-                  <option value="Scheduled">Scheduled</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Cancelled">Cancelled</option>
-                </select>
-              </div>
-
-              <div className="pt-4 flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-sm font-medium shadow-sm shadow-blue-600/20 transition-all"
-                >
-                  Save Appointment
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+                      <button 
+                        onClick={() => handleReject(res.id)}
+                        className="p-2.5 bg-red-50 text-red-600 border border-red-100 rounded-xl hover:bg-red-600 hover:text-white transition-all shadow-sm"
+                        title="Tolak Janji Temu"
+                      >
+                        <FaTimes className="text-xs" />
+                      </button>
+                    </div>
+                  ) : (
+                    <span className="text-xs text-slate-400 font-semibold italic">Selesai diarsip</span>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Card>
     </div>
   );
 }
