@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
+import { authAPI } from "../../services/authAPI"; // Menggunakan API Supabase Manual
 import { BsFillExclamationDiamondFill } from "react-icons/bs";
 import { ImSpinner2 } from "react-icons/im";
 import { FaUser, FaLock, FaGoogle, FaFacebook } from "react-icons/fa";
@@ -28,47 +28,38 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(""); // Reset error state
+    try {
+      setLoading(true);
+      setError(""); // Reset error state
 
-    axios
-      .post("https://dummyjson.com/user/login", {
-        username: dataForm.email,
+      // Login menembak API Supabase manual
+      const userData = await authAPI.login({
+        email: dataForm.email,
         password: dataForm.password,
-      })
-      .then((response) => {
-        if (response.status !== 200) {
-          setError(response.data.message);
-          return;
-        }
-        // Jika login sukses, arahkan ke dashboard
-        navigate("/");
-      })
-      .catch((err) => {
-        if (err.response) {
-          setError(err.response.data.message || "An error occurred");
-        } else {
-          setError(err.message || "An unknown error occurred");
-        }
-      })
-      .finally(() => {
-        setLoading(false);
       });
+
+      // Simpan data session ke local storage
+      localStorage.setItem("user_session", JSON.stringify(userData));
+
+      // LOGIKA ROLE-BASED ROUTING (Ide Kamu!)
+      if (userData.role === 'admin') {
+        navigate("/"); // Masuk ke Dashboard CRM Utama
+      } else {
+        navigate("/"); // Masuk ke tampilan User biasa
+      }
+
+    } catch (err) {
+      setError(err.message || "An error occurred during login.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Notifikasi Error (Bisa juga dipindah ke Alert.jsx nanti)
+  // Notifikasi Error
   const errorInfo = error ? (
     <div className="w-full bg-red-50 mb-5 p-4 text-sm font-medium text-red-600 rounded-xl flex items-center border border-red-200 shadow-sm">
       <BsFillExclamationDiamondFill className="text-red-600 mr-3 text-lg" />
       {error}
-    </div>
-  ) : null;
-
-  // Notifikasi Loading
-  const loadingInfo = loading ? (
-    <div className="w-full bg-blue-50 mb-5 p-4 text-sm font-medium text-blue-600 rounded-xl flex items-center border border-blue-200 shadow-sm">
-      <ImSpinner2 className="mr-3 animate-spin text-blue-600 text-lg" />
-      Mohon Tunggu...
     </div>
   ) : null;
 
@@ -81,19 +72,19 @@ export default function Login() {
         We are glad to see you back with us
       </p>
 
-      {/* Menampilkan notifikasi error / loading di atas form */}
+      {/* Menampilkan notifikasi error di atas form */}
       {errorInfo}
-      {loadingInfo}
 
       <form className="w-full space-y-5" onSubmit={handleSubmit}>
         
         <InputField
           name="email"
-          placeholder="Username"
+          placeholder="Email Address"
           icon={<FaUser />}
           value={dataForm.email}
           onChange={handleChange}
           required
+          disabled={loading}
         />
 
         <InputField
@@ -104,14 +95,20 @@ export default function Login() {
           value={dataForm.password}
           onChange={handleChange}
           required
+          disabled={loading}
         />
 
         {/* Menggunakan Komponen Button Kustom */}
         <Button 
           type="dark" 
-          className="w-full py-4 tracking-wide text-sm mt-4"
+          disabled={loading}
+          className="w-full py-4 tracking-wide text-sm mt-4 flex justify-center items-center"
         >
-          {loading ? "LOADING..." : "NEXT"}
+          {loading ? (
+            <><ImSpinner2 className="animate-spin mr-2 text-lg" /> PROCESSING...</>
+          ) : (
+            "NEXT"
+          )}
         </Button>
       </form>
 
@@ -135,6 +132,10 @@ export default function Login() {
           Login with Facebook
         </Button>
       </div>
+
+      <p className="mt-6 text-sm text-gray-500">
+        Don't have an account? <Link to="/register" className="text-blue-600 font-semibold hover:underline">Sign Up</Link>
+      </p>
     </div>
   );
 }

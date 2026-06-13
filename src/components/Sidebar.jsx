@@ -5,7 +5,8 @@ import {
   FaCalendarAlt,
   FaCog,
   FaQuestionCircle,
-  FaBan, FaBox, FaUsers, FaPlus, FaTags, FaFlask, FaShoppingCart
+  FaBan, FaBox, FaUsers, FaPlus, FaTags, FaFlask, FaShoppingCart,
+  FaUserCog
 } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 
@@ -48,6 +49,11 @@ export default function Sidebar() {
           <li>
             <NavLink to="/customers" className={menuClass}>
               <FaUsers className="mr-3 text-lg" /> Customers
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/users" className={menuClass}>
+              <FaUserCog className="mr-3 text-lg" />User
             </NavLink>
           </li>
           <li>
