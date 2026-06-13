@@ -43,7 +43,7 @@ export default function Login() {
 
       // LOGIKA ROLE-BASED ROUTING (Ide Kamu!)
       if (userData.role === 'admin') {
-        navigate("/"); // Masuk ke Dashboard CRM Utama
+        navigate("/dashboard"); // Masuk ke Dashboard CRM Utama
       } else {
         navigate("/"); // Masuk ke tampilan User biasa
       }

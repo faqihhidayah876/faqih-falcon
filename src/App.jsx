@@ -2,6 +2,9 @@ import React, { Suspense, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./assets/tailwind.css";
+
+const LandingPage = React.lazy(() => import("./pages/public/LandingPage"));
+
 const Dashboard = React.lazy(() => import("./pages/Dashboard"))
 const Header = React.lazy(() => import("./components/Header"))
 const Patients = React.lazy(() => import("./pages/Patients"))
@@ -19,6 +22,7 @@ const ProductDetail = React.lazy(() => import("./pages/ProductDetail"));
 const Orders = React.lazy(() => import("./pages/Orders"));
 const Customers = React.lazy(() => import("./pages/Customers"));
 const Users = React.lazy(() => import("./pages/Users"));
+
 import Loading from "./components/Loading";
 import { Route, Routes } from "react-router-dom";
 import NotFound from "./pages/ErrorPage";
@@ -30,8 +34,11 @@ function App() {
   return (
     <Suspense fallback={<Loading />}>
     <Routes>
+
+      <Route path="/" element={<LandingPage />} />
+      
       <Route element={<MainLayout/>}>
-      <Route path="/" element={<Dashboard />} />
+      <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/patients" element={<Patients />} />
       <Route path="/appointments" element={<Appointments />} />
       <Route path="/services" element={<Services />} />

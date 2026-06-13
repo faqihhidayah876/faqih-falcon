@@ -37,7 +37,7 @@ export default function Sidebar() {
       <div className="flex-1 overflow-y-auto">
         <ul className="space-y-1">
           <li>
-            <NavLink to="/" className={menuClass}>
+            <NavLink to="/dashboard" className={menuClass}>
               <FaHome className="mr-3 text-lg" /> Dashboard
             </NavLink>
           </li>
