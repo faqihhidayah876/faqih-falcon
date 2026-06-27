@@ -1,5 +1,5 @@
 import FloatingChat from "../../components/FloatingChat";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { 
   FaSpa, FaArrowRight, FaUserMd, FaLeaf, FaStar, 
   FaCalendarCheck, FaSmile, FaShieldAlt, FaChartLine, 
@@ -39,14 +39,14 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafcff] font-jakarta antialiased text-slate-800 overflow-x-hidden selection:bg-blue-200 selection:text-blue-900 relative">
+    <div className="min-h-screen bg-[#FAF7F2] font-inter antialiased text-[#2D2A26] overflow-x-hidden selection:bg-[#E8B4BC]/30 selection:text-[#2D2A26] relative">
       
       {/* ===== KUMPULAN CUSTOM STYLES & KEYFRAMES ===== */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
         
-        .font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .font-playfair { font-family: 'Playfair Display', serif; }
+        .font-cormorant { font-family: 'Cormorant Garamond', serif; }
+        .font-inter { font-family: 'Inter', sans-serif; }
 
         .text-gradient-gold {
           background: linear-gradient(135deg, #b8860b 0%, #ffd700 50%, #b8860b 100%);
@@ -99,7 +99,7 @@ export default function LandingPage() {
           position: absolute;
           top: 0; left: 0; right: 0; bottom: 0;
           border-radius: inherit;
-          background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(59, 130, 246, 0.15), transparent 40%);
+          background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(201, 134, 134, 0.12), transparent 40%);
           opacity: 0;
           transition: opacity 0.3s;
           z-index: 0;
@@ -148,7 +148,7 @@ export default function LandingPage() {
           position: absolute;
           inset: -5px;
           border-radius: 3rem;
-          background: linear-gradient(45deg, #3b82f6, #06b6d4, #8b5cf6, #3b82f6);
+          background: linear-gradient(45deg, #E8B4BC, #C9A961, #9CAF88, #E8B4BC);
           background-size: 300% 300%;
           animation: gradientSpin 6s ease infinite;
           z-index: -1;
@@ -183,10 +183,10 @@ export default function LandingPage() {
 
       {/* ===== DYNAMIC MESH BACKGROUND ===== */}
       <div className="fixed inset-0 w-full h-full pointer-events-none overflow-hidden">
-        <div className="mesh-blob w-[700px] h-[700px] bg-blue-200/50 rounded-full top-[-20%] left-[-10%]" />
-        <div className="mesh-blob w-[600px] h-[600px] bg-cyan-200/40 rounded-full top-[40%] right-[-15%]" style={{animationDelay: '-7s'}} />
-        <div className="mesh-blob w-[800px] h-[800px] bg-indigo-100/30 rounded-full bottom-[-30%] left-[20%]" style={{animationDelay: '-14s'}} />
-        <div className="mesh-blob w-[400px] h-[400px] bg-rose-100/20 rounded-full top-[10%] left-[40%]" style={{animationDelay: '-20s'}} />
+        <div className="mesh-blob w-[700px] h-[700px] bg-[#E8B4BC]/30 rounded-full top-[-20%] left-[-10%]" />
+        <div className="mesh-blob w-[600px] h-[600px] bg-[#9CAF88]/30 rounded-full top-[40%] right-[-15%]" style={{animationDelay: '-7s'}} />
+        <div className="mesh-blob w-[800px] h-[800px] bg-[#C9A961]/20 rounded-full bottom-[-30%] left-[20%]" style={{animationDelay: '-14s'}} />
+        <div className="mesh-blob w-[400px] h-[400px] bg-[#C98686]/20 rounded-full top-[10%] left-[40%]" style={{animationDelay: '-20s'}} />
       </div>
 
       {/* ===== NAVBAR ULTRA-GLASS ===== */}
@@ -306,11 +306,11 @@ export default function LandingPage() {
             { value: "24/7", label: "Layanan VVIP", icon: FaGem },
           ].map((stat, idx) => (
             <div key={idx} className={`reveal-on-scroll spotlight-card p-8 text-center delay-${(idx+1)*100}`} onMouseMove={handleMouseMove}>
-              <div className="icon-box w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-white border border-slate-100 shadow-sm text-blue-600">
+              <div className="icon-box w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-white border border-[#C9A961]/20 shadow-sm text-[#C98686]">
                 <stat.icon className="text-2xl" />
               </div>
-              <div className="font-playfair text-4xl lg:text-5xl font-black text-slate-900 mb-2 tracking-tight">{stat.value}</div>
-              <div className="text-sm text-slate-500 font-bold uppercase tracking-wider">{stat.label}</div>
+              <div className="font-cormorant text-4xl lg:text-5xl font-black text-[#2D2A26] mb-2 tracking-tight">{stat.value}</div>
+              <div className="text-sm text-[#6B645C] font-bold uppercase tracking-wider">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -318,11 +318,11 @@ export default function LandingPage() {
         {/* ===== LAYANAN VVIP ===== */}
         <section id="layanan" className="mt-40 relative z-10 pt-10">
           <div className="text-center mb-20 max-w-3xl mx-auto reveal-on-scroll">
-            <span className="text-blue-600 font-bold text-sm uppercase tracking-widest mb-4 block">Layanan Premium</span>
+            <span className="text-[#C98686] font-bold text-sm uppercase tracking-widest mb-4 block">Layanan Premium</span>
             <h2 className="font-playfair text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
               Eksklusif Untuk <span className="text-gradient-blue">Kebutuhan Anda</span>
             </h2>
-            <p className="text-slate-500 text-lg font-medium">
+            <p className="text-[#6B645C] text-lg font-medium">
               Rasakan pengalaman perawatan bertaraf internasional dengan privasi maksimal dan hasil yang memukau.
             </p>
           </div>
@@ -340,9 +340,9 @@ export default function LandingPage() {
                 <div className="icon-box w-16 h-16 bg-white border border-slate-100 rounded-2xl flex items-center justify-center mb-6 shadow-sm">
                   <service.icon className={`w-7 h-7 ${service.color}`} />
                 </div>
-                <h3 className="font-playfair font-bold text-2xl text-slate-900 mb-4">{service.title}</h3>
-                <p className="text-slate-500 font-medium mb-8 leading-relaxed">{service.desc}</p>
-                <div className="flex items-center gap-2 text-sm font-bold text-slate-400 group-hover:text-blue-600 transition-colors">
+                <h3 className="font-cormorant font-bold text-2xl text-[#2D2A26] mb-4">{service.title}</h3>
+                <p className="text-[#6B645C] font-medium mb-8 leading-relaxed">{service.desc}</p>
+                <div className="flex items-center gap-2 text-sm font-bold text-[#6B645C] group-hover:text-[#C98686] transition-colors">
                   Selengkapnya <FaArrowRight className="text-xs transform group-hover:translate-x-1 transition-transform duration-300"/>
                 </div>
               </div>
@@ -353,7 +353,7 @@ export default function LandingPage() {
         {/* ===== TESTIMONIAL ===== */}
         <section id="testimoni" className="mt-40 relative z-10 pt-10">
           <div className="reveal-on-scroll text-center mb-16">
-            <span className="text-blue-600 font-bold text-sm uppercase tracking-widest mb-4 block">Testimoni</span>
+            <span className="text-[#C98686] font-bold text-sm uppercase tracking-widest mb-4 block">Testimoni</span>
             <h2 className="font-playfair text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
               Cerita dari <span className="text-gradient-blue">Klien Kami</span>
             </h2>
@@ -366,16 +366,16 @@ export default function LandingPage() {
               { name: "Michelle Tan", job: "Beauty Vlogger", text: "Peralatan tercanggih yang pernah saya lihat. Sentuhan dokter-dokternya sangat profesional.", img: 32 },
             ].map((testi, idx) => (
               <div key={idx} className="reveal-on-scroll spotlight-card p-10" style={{transitionDelay: `${idx * 150}ms`}} onMouseMove={handleMouseMove}>
-                <FaQuoteLeft className="text-blue-100 text-5xl mb-6" />
+                <div className="testimonial-quote"><FaQuoteLeft className="text-5xl mb-6 opacity-50" /></div>
                 <div className="flex gap-1 mb-6">
                   {[...Array(5)].map((_, i) => <FaStar key={i} className="w-4 h-4 text-amber-400" />)}
                 </div>
-                <p className="text-slate-600 italic mb-10 font-medium leading-relaxed text-[15px]">"{testi.text}"</p>
+                <p className="text-[#6B645C] italic mb-10 font-medium leading-relaxed text-[15px]">"{testi.text}"</p>
                 <div className="flex items-center gap-4 border-t border-slate-100 pt-6">
                   <img src={`https://i.pravatar.cc/150?img=${testi.img}`} alt={testi.name} className="w-14 h-14 rounded-full border-2 border-white shadow-md object-cover" />
                   <div>
-                    <div className="font-bold text-slate-900">{testi.name}</div>
-                    <div className="text-sm text-blue-600 font-semibold">{testi.job}</div>
+                    <div className="font-bold text-[#2D2A26]">{testi.name}</div>
+                    <div className="text-sm text-[#C98686] font-semibold">{testi.job}</div>
                   </div>
                 </div>
               </div>
@@ -393,7 +393,7 @@ export default function LandingPage() {
             </div>
             
             <div className="relative z-10 max-w-3xl mx-auto">
-              <FaGem className="text-5xl text-cyan-400 mx-auto mb-8 animate-pulse" />
+              <FaGem className="text-5xl text-[#E8B4BC] mx-auto mb-8 animate-pulse" />
               <h2 className="font-playfair text-4xl lg:text-6xl font-bold text-white mb-8 leading-tight">
                 Mulai Transformasi <br/><span className="text-gradient-gold italic">Eksklusif Anda</span>
               </h2>
@@ -402,7 +402,7 @@ export default function LandingPage() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                <a href="/register" className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold px-10 py-5 rounded-full text-lg shadow-xl shadow-blue-900/50 hover:scale-105 transition-all flex items-center justify-center gap-3">
+                <a href="/register" className="bg-gradient-to-r from-[#C98686] to-[#E8B4BC] hover:from-[#2D2A26] hover:to-[#2D2A26] text-white font-bold px-10 py-5 rounded-full text-lg shadow-xl shadow-[#C98686]/30 hover:scale-105 transition-all flex items-center justify-center gap-3">
                   Reservasi<FaArrowRight />
                 </a>
                 <a href="/" className="bg-white/5 border border-white/20 hover:bg-white/10 text-white font-bold px-10 py-5 rounded-full text-lg backdrop-blur-md hover:scale-105 transition-all flex items-center justify-center gap-3">
@@ -415,20 +415,20 @@ export default function LandingPage() {
       </main>
 
       {/* ===== FOOTER ===== */}
-      <footer className="bg-slate-950 text-slate-400 mt-32 border-t border-white/5 py-16 relative z-10">
+      <footer className="bg-[#F5EFE6] text-[#6B645C] mt-32 border-t border-[#C9A961]/10 py-16 relative z-10">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid md:grid-cols-4 gap-12">
             <div className="md:col-span-1">
                 <a href="/" className="flex items-center gap-3 mb-6">
                     {/* Logo Image Custom Footer */}
-                    <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg bg-white/10 backdrop-blur-md border border-white/20 p-0.5">
+                    <div className="w-10 h-10 rounded-xl overflow-hidden shadow-md bg-white border border-[#C9A961]/30 p-0.5">
                        <img src="https://i.ibb.co.com/814mnML/logo-klinik-CRM.png" alt="GlowCare Logo" className="w-full h-full object-contain" />
                     </div>
-                    <span className="text-xl font-bold tracking-tight font-playfair text-white">Glow<span className="text-blue-500">Care</span></span>
+                    <div className="flex items-baseline gap-0.5"><span className="text-xl font-bold tracking-tight text-[#2D2A26] font-cormorant">Glow</span><span className="text-xl font-bold tracking-tight text-gradient-rose font-cormorant">Care</span></div>
                 </a>
-                <p className="text-sm leading-relaxed">Mendefinisikan ulang standar kecantikan dan estetika medis melalui keahlian tanpa kompromi.</p>
+                <p className="text-sm leading-relaxed text-[#6B645C]">Defining natural beauty with modern science.</p>
             </div>
             <div>
-                <h4 className="font-bold text-white mb-6 uppercase tracking-widest text-xs">Navigasi</h4>
+                <h4 className="font-bold text-[#2D2A26] mb-6 uppercase tracking-widest text-xs">Navigasi</h4>
                 <ul className="space-y-3 text-sm">
                     <li><a href="#" className="hover:text-white transition-colors">Beranda</a></li>
                     <li><a href="#" className="hover:text-white transition-colors">Layanan</a></li>
@@ -437,7 +437,7 @@ export default function LandingPage() {
                 </ul>
             </div>
             <div>
-                <h4 className="font-bold text-white mb-6 uppercase tracking-widest text-xs">Layanan</h4>
+                <h4 className="font-bold text-[#2D2A26] mb-6 uppercase tracking-widest text-xs">Layanan</h4>
                 <ul className="space-y-3 text-sm">
                     <li><a href="#" className="hover:text-white transition-colors">Rejuvenasi Organik</a></li>
                     <li><a href="#" className="hover:text-white transition-colors">Anti-Aging Ultherapy</a></li>
@@ -446,11 +446,11 @@ export default function LandingPage() {
                 </ul>
             </div>
             <div>
-                <h4 className="font-bold text-white mb-6 uppercase tracking-widest text-xs">Kontak</h4>
+                <h4 className="font-bold text-[#2D2A26] mb-6 uppercase tracking-widest text-xs">Kontak</h4>
                 <ul className="space-y-3 text-sm">
-                    <li className="flex items-center gap-2"><FaMapMarkerAlt className="text-blue-500"/> Pekanbaru, ID</li>
-                    <li className="flex items-center gap-2"><FaPhoneAlt className="text-blue-500"/> +62 800 1234 5678</li>
-                    <li className="flex items-center gap-2"><FaEnvelope className="text-blue-500"/> faqih24si@mahasiswa.pcr.ac.id</li>
+                    <li className="flex items-center gap-2"><FaMapMarkerAlt className="text-[#C98686]"/> Pekanbaru, ID</li>
+                    <li className="flex items-center gap-2"><FaPhoneAlt className="text-[#C98686]"/> +62 800 1234 5678</li>
+                    <li className="flex items-center gap-2"><FaEnvelope className="text-[#C98686]"/> faqih24si@mahasiswa.pcr.ac.id</li>
                 </ul>
                 <div className="flex gap-4 mt-6">
                     <a href="#" className="w-9 h-9 rounded-full border border-slate-800 bg-slate-900 flex items-center justify-center hover:bg-blue-600 hover:border-blue-600 transition-all"><FaInstagram size={14}/></a>
@@ -458,7 +458,7 @@ export default function LandingPage() {
                 </div>
             </div>
         </div>
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 mt-12 pt-8 border-t border-slate-800/50 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 mt-12 pt-8 border-t border-[#2D2A26]/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-[#6B645C]">
             <p>&copy; {new Date().getFullYear()} GlowCare Clinic. All rights reserved.</p>
             <p>Crafted with Precision & Passion</p>
         </div>
