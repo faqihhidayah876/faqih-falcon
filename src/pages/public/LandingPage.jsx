@@ -6,7 +6,8 @@ import {
   FaPhoneAlt, FaMapMarkerAlt, FaEnvelope, FaFacebookF,
   FaInstagram, FaTwitter, FaQuoteLeft, FaPlay, FaCrown,
   FaGem, FaMagic, FaBolt, FaHourglassHalf, FaFemale,
-  FaMedal, FaHeart, FaClock, FaAward, FaCheck
+  FaMedal, FaHeart, FaClock, FaAward, FaCheck,
+  FaSearch, FaRegLightbulb, FaHandSparkles
 } from "react-icons/fa";
 
 export default function LandingPage() {
@@ -32,6 +33,7 @@ export default function LandingPage() {
       {/* ===== KUMPULAN CUSTOM STYLES & KEYFRAMES ===== */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+        html { scroll-behavior: smooth; }
         .font-cormorant { font-family: 'Cormorant Garamond', serif; }
         .font-inter { font-family: 'Inter', sans-serif; }
         .text-gradient-gold {
@@ -49,10 +51,14 @@ export default function LandingPage() {
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
         }
+        .text-gradient-rose {
+          background: linear-gradient(135deg, #C98686 0%, #E8B4BC 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
         .icon-gradient-blush-sage {
           background: linear-gradient(135deg, #E8B4BC 0%, #9CAF88 100%);
         }
-        /* Navigasi Glass */
         .glass-nav {
           background: rgba(255, 255, 255, 0.6);
           backdrop-filter: blur(24px) saturate(200%);
@@ -60,7 +66,6 @@ export default function LandingPage() {
           border-bottom: 1px solid rgba(255, 255, 255, 0.9);
           box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
         }
-        /* Scroll Reveal Base Classes */
         .reveal-on-scroll {
           opacity: 0;
           transform: translateY(40px) scale(0.98);
@@ -76,7 +81,6 @@ export default function LandingPage() {
         .delay-300 { transition-delay: 300ms; }
         .delay-400 { transition-delay: 400ms; }
 
-        /* ===== STATS CARD (PRD 2) ===== */
         .stats-card {
           background: #FDFCFA;
           border: 1px solid rgba(201, 169, 97, 0.25);
@@ -101,7 +105,6 @@ export default function LandingPage() {
         .stats-card:hover::before { opacity: 1; }
         .stats-card > * { position: relative; z-index: 1; }
 
-        /* ===== WHY CHOOSE US CARD ===== */
         .why-card {
           background: #FDFCFA;
           border: 1px solid rgba(156, 175, 136, 0.25);
@@ -114,7 +117,6 @@ export default function LandingPage() {
           border-color: rgba(156, 175, 136, 0.5);
         }
 
-        /* ===== SERVICES CARD (PRD 2) ===== */
         .service-card {
           background: #FDFCFA;
           border: 1px solid rgba(156, 175, 136, 0.25);
@@ -143,20 +145,97 @@ export default function LandingPage() {
         }
         .icon-box { transition: all 0.4s ease; }
 
-        /* Floating Badge Animasi */
-        .float-badge {
-          animation: floatBadge 6s ease-in-out infinite;
+        .process-card {
+          background: #FDFCFA;
+          border: 1px solid rgba(232, 180, 188, 0.3);
+          border-radius: 2rem;
+          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+          position: relative;
+          overflow: hidden;
         }
-        .float-badge-delay {
-          animation: floatBadge 6s ease-in-out infinite;
-          animation-delay: -3s;
+        .process-card::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(232, 180, 188, 0.05), rgba(201, 169, 97, 0.05));
+          opacity: 0;
+          transition: opacity 0.5s;
         }
+        .process-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 25px 50px -12px rgba(201, 134, 134, 0.25);
+          border-color: rgba(201, 134, 134, 0.5);
+        }
+        .process-card:hover::before { opacity: 1; }
+        .process-card > * { position: relative; z-index: 1; }
+        .process-number {
+          font-family: 'Cormorant Garamond', serif;
+          font-style: italic;
+          font-weight: 800;
+          font-size: clamp(5rem, 10vw, 8rem);
+          line-height: 0.85;
+          background: linear-gradient(135deg, #C98686 0%, #E8B4BC 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          opacity: 0.9;
+        }
+
+        .testimonial-card {
+          background: #FDFCFA;
+          border: 1px solid rgba(232, 180, 188, 0.3);
+          border-radius: 1.5rem;
+          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .testimonial-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 25px 50px -12px rgba(201, 134, 134, 0.25);
+          border-color: rgba(201, 134, 134, 0.5);
+        }
+
+        .gallery-item {
+          overflow: hidden;
+          border-radius: 1.5rem;
+          position: relative;
+          cursor: pointer;
+          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .gallery-item img {
+          transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .gallery-item::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: rgba(45, 42, 38, 0);
+          transition: background 0.5s;
+        }
+        .gallery-item:hover::after {
+          background: rgba(45, 42, 38, 0.4);
+        }
+        .gallery-item:hover img {
+          transform: scale(1.05);
+        }
+        .gallery-item .gallery-overlay {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+          transition: opacity 0.5s;
+          z-index: 2;
+        }
+        .gallery-item:hover .gallery-overlay {
+          opacity: 1;
+        }
+
+        .float-badge { animation: floatBadge 6s ease-in-out infinite; }
+        .float-badge-delay { animation: floatBadge 6s ease-in-out infinite; animation-delay: -3s; }
         @keyframes floatBadge {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-12px); }
         }
 
-        /* Animasi Fluid Mesh Background */
         .mesh-blob {
           position: absolute;
           filter: blur(100px);
@@ -171,10 +250,7 @@ export default function LandingPage() {
           66% { transform: translate(-50px, 50px) scale(0.8); }
           100% { transform: translate(0px, 0px) scale(1); }
         }
-        /* Hero Image Glow & Rotation */
-        .hero-image-wrapper {
-          position: relative;
-        }
+        .hero-image-wrapper { position: relative; }
         .hero-image-wrapper::before {
           content: '';
           position: absolute;
@@ -192,11 +268,7 @@ export default function LandingPage() {
           50% { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
         }
-        /* Shimmer Badge */
-        .shimmer-badge {
-          position: relative;
-          overflow: hidden;
-        }
+        .shimmer-badge { position: relative; overflow: hidden; }
         .shimmer-badge::after {
           content: '';
           position: absolute;
@@ -210,6 +282,13 @@ export default function LandingPage() {
           20% { left: 200%; }
           100% { left: 200%; }
         }
+        .sparkles-pulse {
+          animation: sparklesPulse 2s ease-in-out infinite;
+        }
+        @keyframes sparklesPulse {
+          0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+          50% { transform: scale(1.15) rotate(10deg); opacity: 0.85; }
+        }
       `}</style>
 
       {/* ===== DYNAMIC MESH BACKGROUND ===== */}
@@ -220,7 +299,7 @@ export default function LandingPage() {
         <div className="mesh-blob w-[400px] h-[400px] bg-[#C98686]/20 rounded-full top-[10%] left-[40%]" style={{animationDelay: '-20s'}} />
       </div>
 
-      {/* ===== NAVBAR ULTRA-GLASS (TIDAK DIUBAH) ===== */}
+      {/* ===== NAVBAR ULTRA-GLASS (FINAL) ===== */}
       <nav className="glass-nav fixed top-0 w-full z-50 py-4 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 flex justify-between items-center">
           <a href="/" className="flex items-center gap-3 group">
@@ -253,7 +332,7 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* ===== HERO SECTION (TIDAK DIUBAH) ===== */}
+      {/* ===== HERO SECTION (FINAL) ===== */}
       <main className="pt-36 pb-24 lg:pt-48 lg:pb-32 px-6 lg:px-12 max-w-7xl mx-auto relative z-10">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           <div className="relative z-10">
@@ -316,7 +395,7 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* ===== STATISTIK (REDESIGNED - PRD 2) ===== */}
+        {/* ===== STATISTIK (FINAL) ===== */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-32 relative z-10">
           {[
             { value: "15+", label: "Dokter Spesialis", icon: FaUserMd },
@@ -334,10 +413,9 @@ export default function LandingPage() {
           ))}
         </div>
 
-        {/* ===== WHY CHOOSE US (BARU - PRD 2) ===== */}
+        {/* ===== WHY CHOOSE US (FINAL) ===== */}
         <section className="mt-40 relative z-10 pt-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Kolom Kiri: Gambar + Floating Badges */}
             <div className="reveal-on-scroll relative">
               <div className="relative rounded-[2rem] overflow-hidden shadow-2xl shadow-[#C98686]/20 border border-[#C9A961]/20">
                 <img
@@ -347,8 +425,6 @@ export default function LandingPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-tr from-[#C98686]/20 via-transparent to-[#9CAF88]/20" />
               </div>
-
-              {/* Floating Badge 1 */}
               <div className="float-badge absolute -top-6 -right-6 bg-white rounded-2xl p-5 shadow-xl shadow-[#C9A961]/20 border border-[#C9A961]/20 flex items-center gap-3">
                 <div className="icon-gradient-blush-sage w-12 h-12 rounded-xl flex items-center justify-center">
                   <FaAward className="text-white text-xl" />
@@ -358,8 +434,6 @@ export default function LandingPage() {
                   <div className="text-xs text-[#C98686] font-bold uppercase tracking-wider">2025 Award</div>
                 </div>
               </div>
-
-              {/* Floating Badge 2 */}
               <div className="float-badge-delay absolute -bottom-6 -left-6 bg-white rounded-2xl p-5 shadow-xl shadow-[#9CAF88]/20 border border-[#9CAF88]/30 flex items-center gap-3">
                 <div className="w-12 h-12 rounded-xl bg-[#9CAF88] flex items-center justify-center">
                   <FaShieldAlt className="text-white text-xl" />
@@ -371,7 +445,6 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Kolom Kanan: Heading + 4 Keunggulan */}
             <div className="reveal-on-scroll delay-200">
               <span className="text-[#C98686] font-bold text-sm uppercase tracking-widest mb-4 block">Mengapa Memilih Kami</span>
               <h2 className="font-cormorant italic text-5xl lg:text-6xl font-bold mb-8 leading-[1.1]">
@@ -384,8 +457,6 @@ export default function LandingPage() {
               <p className="text-[#6B645C] text-lg font-medium mb-10 leading-relaxed">
                 Kami memadukan ilmu dermatologi modern dengan bahan-bahan organik terbaik untuk memberikan hasil yang nyata dan berkelanjutan.
               </p>
-
-              {/* 4 Keunggulan */}
               <div className="space-y-5">
                 {[
                   { icon: FaUserMd, title: "Dokter Bersertifikat Internasional", desc: "Tim medis kami lulusan universitas top dunia dengan pengalaman 10+ tahun.", color: "#E8B4BC" },
@@ -411,7 +482,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ===== LAYANAN VVIP (REDESIGNED - PRD 2) ===== */}
+        {/* ===== LAYANAN VVIP (FINAL) ===== */}
         <section id="layanan" className="mt-40 relative z-10 pt-10">
           <div className="text-center mb-20 max-w-3xl mx-auto reveal-on-scroll">
             <span className="text-[#C98686] font-bold text-sm uppercase tracking-widest mb-4 block">Layanan Premium</span>
@@ -448,12 +519,52 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ===== TESTIMONIAL (TIDAK DIUBAH) ===== */}
+        {/* ===== OUR PROCESS (PRD 3) ===== */}
+        <section className="mt-40 relative z-10 pt-10">
+          <div className="text-center mb-20 max-w-3xl mx-auto reveal-on-scroll">
+            <span className="text-[#C98686] font-bold text-sm uppercase tracking-widest mb-4 block">Our Process</span>
+            <h2 className="font-cormorant text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+              Empat Langkah Menuju
+              <span className="text-gradient-rose italic"> Kulit Impian</span>
+            </h2>
+            <p className="text-[#6B645C] text-lg font-medium">
+              Proses terstruktur yang dirancang untuk memberikan hasil maksimal dengan pengalaman yang menyenangkan.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+            <div className="hidden lg:block absolute top-20 left-[12%] right-[12%] h-px bg-gradient-to-r from-transparent via-[#E8B4BC] to-transparent opacity-40" />
+
+            {[
+              { num: "01", icon: FaUserMd, title: "Konsultasi Online", desc: "Sesi awal dengan dokter spesialis untuk memahami kebutuhan kulit Anda secara mendalam.", color: "#E8B4BC" },
+              { num: "02", icon: FaSearch, title: "Diagnosa Kulit", desc: "Analisis komprehensif menggunakan teknologi AI dermatologi untuk diagnosa akurat.", color: "#C98686" },
+              { num: "03", icon: FaHandSparkles, title: "Treatment Premium", desc: "Perawatan eksklusif dengan teknologi terkini dan bahan organik pilihan.", color: "#9CAF88" },
+              { num: "04", icon: FaSmile, title: "Hasil Memukau", desc: "Transformasi kulit nyata dengan hasil yang terlihat dan bertahan lama.", color: "#C9A961" },
+            ].map((step, idx) => (
+              <div
+                key={idx}
+                className={`reveal-on-scroll process-card p-8 text-center delay-${(idx+1)*100}`}
+              >
+                <div className="process-number mb-4">{step.num}</div>
+                <div
+                  className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg transition-transform hover:scale-110"
+                  style={{ backgroundColor: step.color }}
+                >
+                  <step.icon className="w-7 h-7 text-white" />
+                </div>
+                <h3 className="font-cormorant font-bold text-2xl text-[#2D2A26] mb-3">{step.title}</h3>
+                <p className="text-[#6B645C] text-sm font-medium leading-relaxed">{step.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ===== TESTIMONIAL (PRD 3) ===== */}
         <section id="testimoni" className="mt-40 relative z-10 pt-10">
           <div className="reveal-on-scroll text-center mb-16">
             <span className="text-[#C98686] font-bold text-sm uppercase tracking-widest mb-4 block">Testimoni</span>
-            <h2 className="font-playfair text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
-              Cerita dari <span className="text-gradient-blue">Klien Kami</span>
+            <h2 className="font-cormorant text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+              Cerita dari <span className="text-gradient-rose italic">Klien Kami</span>
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -462,21 +573,20 @@ export default function LandingPage() {
               { name: "Dinda Kirana", job: "Entrepreneur", text: "Pelayanan mewah dan private. Ultherapy di sini adalah investasi terbaik untuk kulit saya!", img: 25 },
               { name: "Michelle Tan", job: "Beauty Vlogger", text: "Peralatan tercanggih yang pernah saya lihat. Sentuhan dokter-dokternya sangat profesional.", img: 32 },
             ].map((testi, idx) => (
-              <div key={idx} className="reveal-on-scroll spotlight-card p-10" style={{transitionDelay: `${idx * 150}ms`}} onMouseMove={(e) => {
-                const card = e.currentTarget;
-                const rect = card.getBoundingClientRect();
-                card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-                card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
-              }}>
-                <div className="testimonial-quote"><FaQuoteLeft className="text-5xl mb-6 opacity-50" /></div>
+              <div key={idx} className={`reveal-on-scroll testimonial-card p-10 delay-${(idx+1)*100}`}>
+                <FaQuoteLeft className="text-5xl mb-6 text-[#E8B4BC] opacity-70" />
                 <div className="flex gap-1 mb-6">
-                  {[...Array(5)].map((_, i) => <FaStar key={i} className="w-4 h-4 text-amber-400" />)}
+                  {[...Array(5)].map((_, i) => <FaStar key={i} className="w-4 h-4 text-[#C9A961]" />)}
                 </div>
                 <p className="text-[#6B645C] italic mb-10 font-medium leading-relaxed text-[15px]">"{testi.text}"</p>
-                <div className="flex items-center gap-4 border-t border-slate-100 pt-6">
-                  <img src={`https://i.pravatar.cc/150?img=${testi.img}`} alt={testi.name} className="w-14 h-14 rounded-full border-2 border-white shadow-md object-cover" />
+                <div className="flex items-center gap-4 border-t border-[#E8B4BC]/20 pt-6">
+                  <img
+                    src={`https://i.pravatar.cc/150?img=${testi.img}`}
+                    alt={testi.name}
+                    className="w-14 h-14 rounded-full border-2 border-[#E8B4BC] shadow-md object-cover"
+                  />
                   <div>
-                    <div className="font-bold text-[#2D2A26]">{testi.name}</div>
+                    <div className="font-cormorant font-bold text-lg text-[#2D2A26]">{testi.name}</div>
                     <div className="text-sm text-[#C98686] font-semibold">{testi.job}</div>
                   </div>
                 </div>
@@ -485,26 +595,78 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ===== CTA DARK LUXURY (TIDAK DIUBAH) ===== */}
+        {/* ===== GALLERY PREVIEW (PRD 3) ===== */}
+        <section className="mt-40 relative z-10 pt-10">
+          <div className="text-center mb-16 max-w-3xl mx-auto reveal-on-scroll">
+            <span className="text-[#C98686] font-bold text-sm uppercase tracking-widest mb-4 block">Gallery</span>
+            <h2 className="font-cormorant text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+              Momen <span className="text-gradient-blush-sage italic">Elegan</span> Kami
+            </h2>
+            <p className="text-[#6B645C] text-lg font-medium">
+              Intip suasana eksklusif dan hasil perawatan di GlowCare Clinic.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+            {[
+              { src: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&q=80&w=800", alt: "Facial Treatment", span: "md:row-span-2 h-64 md:h-full" },
+              { src: "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&q=80&w=800", alt: "Spa Relaxation", span: "h-64" },
+              { src: "https://images.unsplash.com/photo-1596178065887-11f5a5f9f666?auto=format&fit=crop&q=80&w=800", alt: "Skincare Products", span: "h-64" },
+              { src: "https://images.unsplash.com/photo-1596755389378-c31d21fd1905?auto=format&fit=crop&q=80&w=800", alt: "Beauty Care", span: "h-64" },
+              { src: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=800", alt: "Luxury Spa", span: "h-64" },
+              { src: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=80&w=800", alt: "Premium Treatment", span: "md:col-span-2 h-64" },
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className={`reveal-on-scroll gallery-item ${item.span}`}
+                style={{ transitionDelay: `${idx * 80}ms` }}
+              >
+                <img src={item.src} alt={item.alt} className="w-full h-full object-cover" />
+                <div className="gallery-overlay">
+                  <div className="text-white text-center px-4">
+                    {/* ✅ PERBAIKAN: FaSparkles → FaMagic */}
+                    <FaMagic className="text-2xl mx-auto mb-2 text-[#C9A961]" />
+                    <p className="font-cormorant font-bold text-lg">{item.alt}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ===== CTA LUXE BLUSH & SAGE (PRD 3) ===== */}
         <section id="kontak" className="mt-40 relative z-10 pt-10">
-          <div className="reveal-on-scroll relative bg-slate-900 rounded-[3rem] p-12 lg:p-24 text-center shadow-2xl overflow-hidden border border-slate-800">
-            <div className="absolute inset-0 opacity-30 z-0">
-              <div className="absolute top-0 left-0 w-96 h-96 bg-blue-600 rounded-full filter blur-[100px] mix-blend-screen animate-[move_15s_infinite_alternate]"></div>
-              <div className="absolute bottom-0 right-0 w-96 h-96 bg-cyan-500 rounded-full filter blur-[100px] mix-blend-screen animate-[move_20s_infinite_alternate_reverse]"></div>
+          <div className="reveal-on-scroll relative rounded-[3rem] p-12 lg:p-24 text-center shadow-2xl overflow-hidden"
+               style={{ background: 'linear-gradient(135deg, #E8B4BC 0%, #C98686 50%, #9CAF88 100%)' }}>
+            <div className="absolute inset-0 opacity-40 z-0 pointer-events-none">
+              <div className="absolute top-0 left-0 w-96 h-96 bg-white/30 rounded-full filter blur-[100px]"></div>
+              <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#C9A961]/30 rounded-full filter blur-[100px]"></div>
             </div>
+
             <div className="relative z-10 max-w-3xl mx-auto">
-              <FaGem className="text-5xl text-cyan-400 mx-auto mb-8 animate-pulse" />
-              <h2 className="font-playfair text-4xl lg:text-6xl font-bold text-white mb-8 leading-tight">
-                Mulai Transformasi <br/><span className="text-gradient-gold italic">Eksklusif Anda</span>
+              <div className="inline-block mb-8">
+                {/* ✅ PERBAIKAN: FaSparkles → FaMagic */}
+                <FaMagic className="text-5xl text-white mx-auto sparkles-pulse drop-shadow-lg" />
+              </div>
+              <h2 className="font-cormorant italic text-4xl lg:text-6xl font-bold text-white mb-8 leading-tight drop-shadow-md">
+                Mulai Transformasi
+                <br />
+                <span className="not-italic" style={{
+                  background: 'linear-gradient(135deg, #FAF7F2 0%, #C9A961 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent'
+                }}>
+                  Eksklusif Anda
+                </span>
               </h2>
-              <p className="text-slate-300 text-lg mb-12 font-medium max-w-xl mx-auto">
-                Jadwalkan konsultasi Anda bersama kami dan rasakan perawatan terbaik kami.
+              <p className="text-white/90 text-lg mb-12 font-medium max-w-xl mx-auto drop-shadow-sm">
+                Jadwalkan konsultasi Anda bersama kami dan rasakan perawatan terbaik dengan sentuhan personal yang mewah.
               </p>
               <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                <a href="/register" className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold px-10 py-5 rounded-full text-lg shadow-xl shadow-blue-900/50 hover:scale-105 transition-all flex items-center justify-center gap-3">
-                  Reservasi<FaArrowRight />
+                <a href="/register" className="group bg-[#E8B4BC] hover:bg-[#C98686] text-white font-bold px-10 py-5 rounded-full text-lg shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-3 border-2 border-white/30">
+                  Reservasi Sekarang <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
                 </a>
-                <a href="/" className="bg-white/5 border border-white/20 hover:bg-white/10 text-white font-bold px-10 py-5 rounded-full text-lg backdrop-blur-md hover:scale-105 transition-all flex items-center justify-center gap-3">
+                <a href="/" className="bg-white hover:bg-[#FAF7F2] text-[#C98686] font-bold px-10 py-5 rounded-full text-lg shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-3 border-2 border-white">
                   <FaPhoneAlt /> Hubungi Concierge
                 </a>
               </div>
@@ -513,7 +675,7 @@ export default function LandingPage() {
         </section>
       </main>
 
-      {/* ===== FOOTER (TIDAK DIUBAH) ===== */}
+      {/* ===== FOOTER (FINAL) ===== */}
       <footer className="bg-[#F5EFE6] text-[#6B645C] mt-32 border-t border-[#C9A961]/10 py-16 relative z-10">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid md:grid-cols-4 gap-12">
           <div className="md:col-span-1">
@@ -528,19 +690,19 @@ export default function LandingPage() {
           <div>
             <h4 className="font-bold text-[#2D2A26] mb-6 uppercase tracking-widest text-xs">Navigasi</h4>
             <ul className="space-y-3 text-sm">
-              <li><a href="#" className="hover:text-white transition-colors">Beranda</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Layanan</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Testimoni</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Kontak</a></li>
+              <li><a href="#" className="hover:text-[#C98686] transition-colors">Beranda</a></li>
+              <li><a href="#" className="hover:text-[#C98686] transition-colors">Layanan</a></li>
+              <li><a href="#" className="hover:text-[#C98686] transition-colors">Testimoni</a></li>
+              <li><a href="#" className="hover:text-[#C98686] transition-colors">Kontak</a></li>
             </ul>
           </div>
           <div>
             <h4 className="font-bold text-[#2D2A26] mb-6 uppercase tracking-widest text-xs">Layanan</h4>
             <ul className="space-y-3 text-sm">
-              <li><a href="#" className="hover:text-white transition-colors">Rejuvenasi Organik</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Anti-Aging Ultherapy</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Pico Laser Pro</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Royal Facial</a></li>
+              <li><a href="#" className="hover:text-[#C98686] transition-colors">Organic Facial</a></li>
+              <li><a href="#" className="hover:text-[#C98686] transition-colors">Pico Laser Premium</a></li>
+              <li><a href="#" className="hover:text-[#C98686] transition-colors">Anti-Aging Therapy</a></li>
+              <li><a href="#" className="hover:text-[#C98686] transition-colors">VIP Facial Gold</a></li>
             </ul>
           </div>
           <div>
@@ -551,8 +713,8 @@ export default function LandingPage() {
               <li className="flex items-center gap-2"><FaEnvelope className="text-[#C98686]"/> faqih24si@mahasiswa.pcr.ac.id</li>
             </ul>
             <div className="flex gap-4 mt-6">
-              <a href="#" className="w-9 h-9 rounded-full border border-slate-800 bg-slate-900 flex items-center justify-center hover:bg-blue-600 hover:border-blue-600 transition-all"><FaInstagram size={14}/></a>
-              <a href="#" className="w-9 h-9 rounded-full border border-slate-800 bg-slate-900 flex items-center justify-center hover:bg-blue-600 hover:border-blue-600 transition-all"><FaFacebookF size={14}/></a>
+              <a href="#" className="w-9 h-9 rounded-full bg-[#E8B4BC] flex items-center justify-center hover:bg-[#C98686] transition-all text-white"><FaInstagram size={14}/></a>
+              <a href="#" className="w-9 h-9 rounded-full bg-[#E8B4BC] flex items-center justify-center hover:bg-[#C98686] transition-all text-white"><FaFacebookF size={14}/></a>
             </div>
           </div>
         </div>
